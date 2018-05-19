@@ -1,0 +1,53 @@
+//
+//  SetupViewController.swift
+//  SubServiOS
+//
+//  Created by Mark Kudlac on 2018-05-09.
+//  Copyright © 2018 Mark Kudlac. All rights reserved.
+//
+
+import UIKit
+
+class SetupViewController: UIViewController {
+
+    @IBOutlet weak var alternateServer: UITextField!
+    
+    @IBOutlet weak var selectServer: UISwitch!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+        
+        Utilities.setTextFromDefault(field: alternateServer, valueTag: CONST.alternateServer)
+        
+        if UserDefaults.standard.bool(forKey: CONST.selectServer)  ||
+            nil == UserDefaults.standard.string(forKey: CONST.alternateServer){
+            selectServer.setOn(true, animated: false)
+        } else {
+            selectServer.setOn(false, animated: false)
+        }
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    @IBAction func modifyAddress(_ sender: Any) {
+        
+        UserDefaults.standard.set(alternateServer.text, forKey: CONST.alternateServer)
+    }
+    
+    
+    @IBAction func defaultServer(_ sender: UISwitch) {
+        
+        if sender.isOn {
+            UserDefaults.standard.set(true, forKey: CONST.selectServer)
+        } else {
+            UserDefaults.standard.set(false, forKey: CONST.selectServer)
+        }
+        
+    }
+}

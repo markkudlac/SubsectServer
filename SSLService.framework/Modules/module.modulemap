@@ -1,0 +1,4 @@
+framework module SSLService {
+    header "SSLService-Swift.h"
+    requires objc
+}

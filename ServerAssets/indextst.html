@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0" />
+        <title>Subsect Test</title>
+
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    
+    </head>
+    
+    <body>
+        <h2>Subsect Test</h2>
+        
+        <div>
+            <!--
+             <input id="servbut" type="button" style="margin-top: 20px" value="Start Server" />
+             
+             <textarea id="messout" rows="15" style="width: 100%; margin-top: 20px"></textarea>
+             -->
+            
+            <div id="dump" style="width: 100%; margin-top: 20px">Messages </div>
+        </div>
+        
+    <script>
+            
+            function testJS(){
+                var message = "Yo!"
+                window.webkit.messageHandlers.MyObserver.postMessage(message)
+                return "OK!"
+            }
+  
+        function messout(strng) {
+            
+            $("#dump").append("</br>"+strng).scrollTop(99999);
+        }
+    
+    function getParam(val) {
+        
+        tmp = [];
+        
+        //var items = location.search.substr(1).split("&");
+        
+        var items = "XXXTHISISTHEPARAMSTRINGXXX".split("&");
+        for (var index = 0; index < items.length; index++) {
+            tmp = items[index].split("=");
+            if (tmp[0] === val) return(tmp[1]);
+        }
+        return "";
+    }
+        
+        $(document).ready(function(){
+                          messout("Param xxx : " + getParam("xxx"))
+                          setInterval(function(){ messout("Hello"); }, 3000);
+        })
+        
+    
+        </script>
+    </body>
+</html>

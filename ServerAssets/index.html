@@ -1,0 +1,514 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="adapter_no_edge.js"></script>
+    <script src="peer16na.js"></script>
+
+    <script src="jquery-2.1.3.min.js"></script>
+    <script src="bootstrap_3.3.6.min.js"></script>
+    <link rel="stylesheet" href="bootstrap_3.3.6.min.css">
+
+    <script type='text/javascript'>
+
+    function getParam(val) {
+
+        tmp = [];
+        var items = "XXXTHISISTHEPARAMSTRINGXXX".split("&");
+        for (var index = 0; index < items.length; index++) {
+            tmp = items[index].split("=");
+            if (tmp[0] === val) return(tmp[1]);
+        }
+        return "";
+    }
+
+    var sublochost = getParam("fullhost");
+    console.log("PATH : " + sublochost);
+
+    </script>
+</head>
+
+
+<style>
+    .logbox {
+    overflow-y: scroll;
+    height: calc(100vh - 6em);
+    padding: 3px 3px;
+    border: 2px solid gray;
+    }
+
+</style>
+
+<body style="height: 100%;">
+
+    <div class="container-fluid">
+        <div class="row" style="margin-top: .5em">
+            <div class="col-xs-3 col-sm-3 col-md-offset-1 col-md-3">
+                <button id="serverstart" type="button" class="btn btn-primary">Start</button>
+                <button id="serverstop" type="button" class="btn btn-primary hidden">Stop</button>
+            </div>
+
+            <div class="col-xs-5 col-sm-5 col-md-4">
+                <span id="datetime" style="font-size: 120%; font-weight: bold;"></span>
+            </div>
+
+            <div class="col-xs-offset-1 col-xs-2 col-sm-offset-1 col-sm-2 col-md-offset-1 col-md-2">
+                    <button id="statsbut" type="button" class="btn btn-primary hidden">Stats</button>
+                    <button id="logbut" type="button" class="btn btn-primary">Log</button>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: .5em">
+            <div class="col-xs-offset-1 col-xs-10 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
+                <div id="logoutput" class="logbox hidden"></div>
+
+                <div id="statsoutput" class="row" style="margin-top: 2em">
+
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-xs-9 col-sm-9 control-label">Current Contections</label>
+                            <div class="col-xs-2 col-sm-2">
+                                <div id="connectcnt" class="form-control-static">0</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-xs-9 col-sm-9 control-label">Max Current Connections</label>
+                            <div class="col-xs-2 col-sm-2">
+                                <div id="connectmax" class="form-control-static">0</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-xs-9 col-sm-9 control-label">Total Contections</label>
+                            <div class="col-xs-2 col-sm-2">
+                                <div id="connecttot" class="form-control-static">0</div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+
+var peer = null;
+var shutdown = false;
+var blobbuff = {};
+
+var connectcnt = 0;
+var connectmax = 0;
+var connecttot = 0;
+
+var timer = null;
+// Peerjs Cloud was longer
+//var cycletime = 60000 * 4;
+
+// Heroku
+var cycletime = 12500;
+
+var restarttimer = null;
+var restartcnt = 0;
+
+var splitsz = 65536 * 2;
+
+	$(document).ready(function(){
+		messout("localhost : " + getParam("fullhost"));
+
+		initall();
+		peerServerOn();
+	})
+
+
+function peerServerOn() {
+
+	// and override the original config object
+	// Call XirSys ICE servers
+
+    $.ajax({
+       url: "https://global.xirsys.net/_turn/adladl.com/",
+       type: "PUT",
+        headers: {
+               "Authorization": "Basic " + btoa("rosemaryp:787c7224-0406-11e6-a067-a950f66e883a")
+             },
+
+      success: function (data) {
+        if (data.s == "ok"){
+            messout("XirSys ok");
+            setPeer(data.v);
+        } else {
+            console.log("Xirsys error : " + data.v)
+            peerReStart();
+	    }
+       // console.log("ICE List: "+JSON.stringify(data.v));
+      },
+
+      error: function() {
+            messout("Xirsys AJAX error");
+            peerReStart();
+      }
+    });
+}
+
+
+function setPeer(customConfig){
+
+     connectcnt = 0;
+    var opts = {
+                host: 'subpeersrv.herokuapp.com',
+          //      host: '192.168.2.60',
+                port: 80
+                };
+
+	if (customConfig !== null) opts.config = customConfig;
+	peer = new Peer(opts);
+
+	peer.on('error', function(err) {
+	    peerReStart();
+	    messout('Peer server ERROR : ' + err.type + " : " + err.message);
+	});
+
+
+	peer.on('open', function(id) {
+
+	  messout('My peer ID is: ' + id);
+	  messout(" Name server : "+ getParam("subnamesrv"));
+	  messout('My  subHostname is: ' + getParam("subhost"));
+
+      if (timer == null) {
+        timer = setInterval(function(){
+      //  messout("sent PING");
+		peer.socket.send({type: "PING", payload: {}});}, cycletime);
+       }
+
+            
+	  $.getJSON("http://"+getParam("subnamesrv")+"/api/setrtcid/"+ getParam("subhost") +
+	            "/" + getParam("passwd") + "/" + id,
+	    function(rtnobj){
+	    messout("server rtn : " + rtnobj.rtn);
+        clearReStart();
+        serverButtonStop()
+	  })
+	  .fail(function(xhr, text){
+	    messout("server call failed : " + text);
+	    peerShutDown();
+        window.webkit.messageHandlers.MyObserver.postMessage("Could not set rtcid : Check settings and restart")
+	  });
+           
+	});
+
+
+	peer.on('disconnected', function(){
+		messout('Server has disconnected');
+		peerReStart();
+	});
+
+
+	peer.on('connection', function(conn) {
+
+	  messout('Data connection started');
+
+
+		conn.on('open', function() {
+		  // Receive messages
+            updateStats(1);
+		     messout('Data Connection openned cnt : ' + connectcnt);
+		});
+
+        conn.on('close', function() {
+		  // Receive messages
+		  updateStats(-1);
+		     messout('Data Connection closeded cnt : ' + connectcnt);
+		});
+
+        conn.on('data', function(rcv) {
+		    messout('Received ' + rcv.file);
+              getappfile(rcv, conn);
+		  });
+
+		 conn.on('error', function(err) {
+		    messout('Connection error : ' + err);
+		});
+	});
+
+	peer.on('close', function() {
+	  messout('Peer closed');
+	});
+}
+
+
+function getappfile(rcv, xconn){
+
+//console.log("Receive count : " + rcv.cnt + "  Receive mime : " + rcv.mimetp +
+//    "Receive rcvkey : " + rcv.rcvkey);
+
+    if (rcv.cnt > 0)
+    {
+        var splitend = rcv.cnt * splitsz
+        var xcnt = rcv.cnt + 1
+        var tblob = blobbuff[rcv.rcvkey].slice((rcv.cnt - 1)*splitsz, splitend,
+            blobbuff[rcv.rcvkey].type);
+
+        if (tblob.size < splitsz || splitend == blobbuff[rcv.rcvkey].size)
+        {
+            xcnt = -1;
+     // These caches cleaned up
+            delete blobbuff[rcv.rcvkey];
+     //       console.log("cleaned buffer : " + rcv.rcvkey);
+        }
+        console.log("sending 0 : " + rcv.rcvkey);
+        xconn.send({uri: rcv.file, blobtype: tblob.type, blob: tblob, cnt: xcnt, rcvkey: rcv.rcvkey,
+                status: 200});
+        return;
+    }
+
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(){
+	    if (this.readyState == 4 && this.status == 200){
+
+            if (this.response.size > splitsz) {
+
+                var yblob = this.response.slice(0, splitsz, this.response.type);
+
+                if (!blobbuff[rcv.rcvkey]) {
+                    blobbuff[rcv.rcvkey] = this.response.slice(splitsz,
+                        this.response.size, this.response.type);
+                }
+console.log("sending 1 : " + rcv.rcvkey);
+                xconn.send({uri: rcv.file, blobtype: this.response.type, blob: yblob,
+                    cnt: 1, rcvkey: rcv.rcvkey, status: this.status});
+
+            } else {
+                console.log("sending 2 : " + rcv.rcvkey + "  BLOB : " + this.response);
+                xconn.send({uri: rcv.file, blobtype: this.response.type, blob: this.response,
+                    cnt: 0, rcvkey: rcv.rcvkey, status: this.status});
+            }
+		 } else if (this.readyState == 4) {
+
+		    console.log("Server ERROR : " + this.status);
+		    xconn.send({uri: rcv.file, blobtype: "null", blob: "null",
+                    cnt: 0, rcvkey: rcv.rcvkey, status: this.status});
+		 }
+	}
+
+	// console.log("Receive type : " + rcv.type + "  Receive args : " + rcv.args);
+
+    var httpfl = 'http://' + fullPath(rcv.file);
+
+    if (rcv.type === "POST") {
+	    xhr.open(rcv.type, httpfl);
+	    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	} else {
+	    xhr.open(rcv.type, httpfl+"?"+rcv.args);
+	}
+
+	xhr.responseType = 'blob';
+	if (rcv.mimetp.length > 0 ) {
+	    xhr.overrideMimeType(rcv.mimetp);
+	}
+
+	if (rcv.type === "POST") {
+	    xhr.send(rcv.args);
+	} else {
+	    xhr.send();
+	}
+}
+
+
+function messout(message){
+
+	$("#logoutput").append("</br>"+message).scrollTop(99999);
+}
+
+
+function initall() {
+
+    $('#serverstart').on("click",function(){
+        clearReStart();
+		peerStartUp();
+	})
+
+    $('#serverstop').on("click",function(){
+		peerShutDown();
+	})
+
+    $('#logbut').on("click",function(){
+           $('#logbut').addClass("hidden");
+           $('#statsbut').removeClass("hidden");
+
+           $('#logoutput').removeClass("hidden");
+           $('#statsoutput').addClass("hidden");
+     })
+
+     $('#statsbut').on("click",function(){
+            $('#statsbut').addClass("hidden");
+           $('#logbut').removeClass("hidden");
+
+           $('#logoutput').addClass("hidden");
+           $('#statsoutput').removeClass("hidden");
+
+     })
+}
+
+
+function fullPath(file) {
+
+    return(getParam("fullhost") + '/' + file);
+}
+
+function setStartDateTime(){
+
+    var dt = new Date();
+
+	var dtstr = leadzero(dt.getFullYear()) + "/" + leadzero(dt.getMonth() + 1) + "/" +
+	        leadzero(dt.getDate()) + " " + leadzero(dt.getHours())+ ":" +
+	        leadzero(dt.getMinutes());
+
+	$("#datetime").text(dtstr);
+}
+
+
+
+function leadzero(dt){
+
+    return( ("0" + dt).slice(-2) );
+}
+
+
+
+function clearStartDateTime() {
+
+    $("#datetime").text("Server Off");
+}
+
+
+function serverButtonStop() {
+    $('#serverstart').addClass('hidden');
+    $('#serverstop').removeClass('hidden');
+    setStartDateTime();
+}
+
+
+function serverButtonStart() {
+    $('#serverstart').removeClass('hidden');
+    $('#serverstop').addClass('hidden');
+    clearStartDateTime();
+}
+
+
+function updateStats(cntchng) {
+
+    connectcnt = connectcnt + cntchng;
+
+    if (cntchng > 0 ) { ++connecttot; }
+    if (connectcnt > connectmax ) { connectmax = connectcnt; }
+
+    $("#connectcnt").text(connectcnt);
+    $("#connectmax").text(connectmax);
+    $("#connecttot").text(connecttot);
+}
+
+
+function peerStartUp(){
+
+	shutdown = false;
+	peerServerOn();
+}
+
+
+function peerShutDown(){
+
+    if (!shutdown) serverOffline();
+
+    shutdown = true;
+    if (timer != null) {
+        clearTimeout(timer);
+        timer = null;
+    }
+
+    if (peer != null) {
+        peer.disconnect();
+        peer.destroy();
+    }
+    peer = null;
+
+    serverButtonStart();
+}
+
+
+function peerReStart(){
+
+    if (!shutdown && restartcnt == 0) {
+        restartcnt = 1;
+        restarttimer = setTimeout(loopReStart, 15000);
+    }
+}
+
+
+function loopReStart(){
+
+    peerShutDown();
+
+    if (restartcnt <= 120) {
+        if (restartcnt == 1 || restartcnt % 3 == 0) {
+            messout("Reset count : " + restartcnt);
+        }
+        ++restartcnt;
+        restarttimer = setTimeout(loopReStart, 30000);
+       peerStartUp();
+    } else {
+        clearReStart();
+        //Send alert message to iOS
+        window.webkit.messageHandlers.MyObserver.postMessage("Server connection lost : Check network")
+    }
+}
+
+function clearReStart(){
+
+    restartcnt = 0;
+    if (restarttimer != null) {
+        clearTimeout(restarttimer);
+        restarttimer = null;
+    }
+}
+
+
+
+function serverOffline(){
+
+    $.getJSON("http://"+getParam("subnamesrv")+"/api/offline/"+ getParam("subhost") +
+            "/" + getParam("passwd"),
+	    function(rtnobj){
+	    messout("Offline rtn : " + rtnobj.rtn);
+	  })
+	  .fail(function(xhr, text){
+	    messout("Offline call failed : " + text);
+	  });
+}
+
+// Test js comm function
+
+/* You can call from iOS with arguments and returns as a string. From javascript just use the webkit message call
+ 
+function testJS(){
+    window.webkit.messageHandlers.MyObserver.postMessage("Yo post message")
+    return "OK this is return!"
+}
+
+function test2JS(mess){
+    var message = "Yo 2!"
+ //   window.webkit.messageHandlers.MyObserver.postMessage(message)
+    return "OK from 2 with mess : " + mess
+}
+ */
+
+</script>
+
+</body>
+</html>
