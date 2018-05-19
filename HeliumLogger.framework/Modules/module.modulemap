@@ -1,0 +1,4 @@
+framework module HeliumLogger {
+    header "HeliumLogger-Swift.h"
+    requires objc
+}

@@ -1,0 +1,4 @@
+framework module KituraNet {
+    header "KituraNet-Swift.h"
+    requires objc
+}

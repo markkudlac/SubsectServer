@@ -1,0 +1,4 @@
+framework module KituraTemplateEngine {
+    header "KituraTemplateEngine-Swift.h"
+    requires objc
+}

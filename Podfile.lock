@@ -1,0 +1,16 @@
+PODS:
+  - NVHTarGzip (1.0.1)
+
+DEPENDENCIES:
+  - NVHTarGzip
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - NVHTarGzip
+
+SPEC CHECKSUMS:
+  NVHTarGzip: 74cc227b902e5725900d37eb6d79b57e93005a73
+
+PODFILE CHECKSUM: 8a24cda8deadfa2d0f3717eb3a928a4c7694519d
+
+COCOAPODS: 1.5.2
