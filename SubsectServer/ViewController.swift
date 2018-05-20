@@ -9,7 +9,7 @@
 import SQLite3
 import UIKit
 import WebKit
-import Kitura
+
 
 
 // Wrap the WKWebView webview to allow IB use
@@ -27,18 +27,9 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var webView: ServerWebView!
     
-    private var queue = DispatchQueue(label: "server_thread")
-    private var router = Router()
-    private let port = 8080
-    
-    var db: OpaquePointer? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        initializeKituraServer()
-        let xtar = NVHTarGzip.init()
-        db = openDatabase()
         
         webView.navigationDelegate = self;
         
@@ -51,7 +42,7 @@ class ViewController: UIViewController {
             var hash:String = "X"
             var nameServer = CONST.defaultServer
             var hostName = "X"
-            let fullHost = IPUtility.getMyIP().ip! + ":" + "\(port)"
+            let fullHost = IPUtility.getMyIP().ip! + ":" + "\(CONST.defaultPort)"
             
             let defaults = UserDefaults.standard
     //        let selectServer = UserDefaults.standard.bool(forKey: CONST.selectServer)
@@ -92,7 +83,11 @@ class ViewController: UIViewController {
                     
                         webView.loadHTMLString(html, baseURL: Bundle.main.resourceURL?.appendingPathComponent("ServerAssets"))
                    
-              //  }
+                if !Initialize.start() {
+                    
+                    print("Initize failed")
+                }
+                
             } catch {
                 print("Error loading webView html")
             }
@@ -147,47 +142,8 @@ extension ViewController : WKNavigationDelegate {
  //       callJavascript(script: "test2JS(23)")
     }
     
-    
-    private func initializeKituraServer() {
-        router = RouterCreator.create()
-        Kitura.addHTTPServer(onPort: port, with: router)
-        
-        let networkData = IPUtility.getMyIP()
-        if let ip = networkData.ip {
-            let url = getUrl(ip: ip, port: "\(port)")
-            
-            print("Server url is \(url)")
-        }
-        
-        queue.async {
-            Kitura.start()
-        }
-    }
-    
-    private func getUrl(ip: String, port: String) -> String {
-        return ("http://" + ip + ":" + port)
-    }
 
-    func openDatabase() -> OpaquePointer? {
-        var db: OpaquePointer? = nil
-        
-        print("In openDB")
-        
-        //   let filePath = Bundle.main.path(forResource:"testdb", ofType:"", inDirectory: "DBsqlite")
-        //   print("Bundle path is : \(filePath)")
-        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent("Hero.sqlite")
-        
-        let err = sqlite3_open(fileURL.path, &db)
-        if err == SQLITE_OK {
-            print("Successfully opened connection to database")
-            return db
-        } else {
-            print("Unable to open database.  err : \(err)")
-            //        PlaygroundPage.current.finishExecution()
-        }
-        return nil
-    }
+
 }
 
 

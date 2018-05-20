@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D43B5B920B06C2900B0ABFC /* Initialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5B820B06C2900B0ABFC /* Initialize.swift */; };
+		1D43B5BB20B07A6300B0ABFC /* SQLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5BA20B07A6300B0ABFC /* SQLHelper.swift */; };
+		1D43B5C420B091C800B0ABFC /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5C020B091C800B0ABFC /* Options.swift */; };
+		1D43B5C520B091C800B0ABFC /* CORS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5C120B091C800B0ABFC /* CORS.swift */; };
+		1D43B5C620B091C800B0ABFC /* AllowedOrigins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5C220B091C800B0ABFC /* AllowedOrigins.swift */; };
+		1D43B5C720B091C800B0ABFC /* RouterCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5C320B091C800B0ABFC /* RouterCreator.swift */; };
 		1DDC8EBC20AE57BD00BCE107 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8EBB20AE57BD00BCE107 /* AppDelegate.swift */; };
 		1DDC8EC320AE57BE00BCE107 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DDC8EC220AE57BE00BCE107 /* Assets.xcassets */; };
 		1DDC8EC620AE57BE00BCE107 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1DDC8EC420AE57BE00BCE107 /* LaunchScreen.storyboard */; };
@@ -29,11 +35,6 @@
 		1DDC8F1620AE600200BCE107 /* Socket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1DDC8F1220AE600200BCE107 /* Socket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1DDC8F5D20AF1A0800BCE107 /* CHTTPParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DDC8F5C20AF1A0800BCE107 /* CHTTPParser.framework */; };
 		1DDC8F5E20AF1A0800BCE107 /* CHTTPParser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1DDC8F5C20AF1A0800BCE107 /* CHTTPParser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		1DDC8F6020AF1DC500BCE107 /* IPUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F5F20AF1DC500BCE107 /* IPUtility.swift */; };
-		1DDC8F6620AF1EF400BCE107 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F6220AF1EF400BCE107 /* Options.swift */; };
-		1DDC8F6720AF1EF400BCE107 /* CORS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F6320AF1EF400BCE107 /* CORS.swift */; };
-		1DDC8F6820AF1EF400BCE107 /* AllowedOrigins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F6420AF1EF400BCE107 /* AllowedOrigins.swift */; };
-		1DDC8F6920AF1EF400BCE107 /* RouterCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F6520AF1EF400BCE107 /* RouterCreator.swift */; };
 		1DDC8F6B20AF2C4100BCE107 /* public in Resources */ = {isa = PBXBuildFile; fileRef = 1DDC8F6A20AF2C4100BCE107 /* public */; };
 		1DDC8F6D20AFB96500BCE107 /* AdminViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F6C20AFB96500BCE107 /* AdminViewController.swift */; };
 		1DDC8F7020AFB97900BCE107 /* BazaarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F6E20AFB97900BCE107 /* BazaarViewController.swift */; };
@@ -70,6 +71,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1D43B5B820B06C2900B0ABFC /* Initialize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Initialize.swift; sourceTree = "<group>"; };
+		1D43B5BA20B07A6300B0ABFC /* SQLHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLHelper.swift; sourceTree = "<group>"; };
+		1D43B5C020B091C800B0ABFC /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
+		1D43B5C120B091C800B0ABFC /* CORS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CORS.swift; sourceTree = "<group>"; };
+		1D43B5C220B091C800B0ABFC /* AllowedOrigins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllowedOrigins.swift; sourceTree = "<group>"; };
+		1D43B5C320B091C800B0ABFC /* RouterCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouterCreator.swift; sourceTree = "<group>"; };
 		1DDC8EB820AE57BD00BCE107 /* SubsectServer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SubsectServer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DDC8EBB20AE57BD00BCE107 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1DDC8EC220AE57BE00BCE107 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -115,7 +122,6 @@
 		1DDC8F3A20AE7FA400BCE107 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = modmap/module.modulemap; sourceTree = "<group>"; };
 		1DDC8F5A20AF19A300BCE107 /* CHTTPParser 10-21-57-568.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CHTTPParser 10-21-57-568.framework"; path = "../../.Trash/CHTTPParser 10-21-57-568.framework"; sourceTree = "<group>"; };
 		1DDC8F5C20AF1A0800BCE107 /* CHTTPParser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CHTTPParser.framework; sourceTree = "<group>"; };
-		1DDC8F5F20AF1DC500BCE107 /* IPUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IPUtility.swift; sourceTree = "<group>"; };
 		1DDC8F6220AF1EF400BCE107 /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		1DDC8F6320AF1EF400BCE107 /* CORS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CORS.swift; sourceTree = "<group>"; };
 		1DDC8F6420AF1EF400BCE107 /* AllowedOrigins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllowedOrigins.swift; sourceTree = "<group>"; };
@@ -157,6 +163,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1D43B5BF20B091C800B0ABFC /* SubsectRouter */ = {
+			isa = PBXGroup;
+			children = (
+				1D43B5C020B091C800B0ABFC /* Options.swift */,
+				1D43B5C120B091C800B0ABFC /* CORS.swift */,
+				1D43B5C220B091C800B0ABFC /* AllowedOrigins.swift */,
+				1D43B5C320B091C800B0ABFC /* RouterCreator.swift */,
+			);
+			path = SubsectRouter;
+			sourceTree = "<group>";
+		};
 		1DDC8EAF20AE57BD00BCE107 = {
 			isa = PBXGroup;
 			children = (
@@ -192,7 +209,6 @@
 			isa = PBXGroup;
 			children = (
 				1DDC8EBB20AE57BD00BCE107 /* AppDelegate.swift */,
-				1DDC8F5F20AF1DC500BCE107 /* IPUtility.swift */,
 				1DDC8F6C20AFB96500BCE107 /* AdminViewController.swift */,
 				1DDC8F6E20AFB97900BCE107 /* BazaarViewController.swift */,
 				1DDC8F6F20AFB97900BCE107 /* Constants.swift */,
@@ -205,6 +221,9 @@
 				1DDC8EC420AE57BE00BCE107 /* LaunchScreen.storyboard */,
 				1DDC8EC720AE57BE00BCE107 /* Info.plist */,
 				1DDC8EE220AE5BC100BCE107 /* SubsectServer-Bridging-Header.h */,
+				1D43B5B820B06C2900B0ABFC /* Initialize.swift */,
+				1D43B5BA20B07A6300B0ABFC /* SQLHelper.swift */,
+				1D43B5BF20B091C800B0ABFC /* SubsectRouter */,
 			);
 			path = SubsectServer;
 			sourceTree = "<group>";
@@ -439,17 +458,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1DDC8F6820AF1EF400BCE107 /* AllowedOrigins.swift in Sources */,
+				1D43B5C520B091C800B0ABFC /* CORS.swift in Sources */,
 				1DDC8F7820AFB99700BCE107 /* SHA-1.swift in Sources */,
-				1DDC8F6620AF1EF400BCE107 /* Options.swift in Sources */,
-				1DDC8F6920AF1EF400BCE107 /* RouterCreator.swift in Sources */,
-				1DDC8F6020AF1DC500BCE107 /* IPUtility.swift in Sources */,
 				1DDC8F7720AFB99700BCE107 /* SetupViewController.swift in Sources */,
 				1DDC8F7A20AFB99700BCE107 /* Utilities.swift in Sources */,
+				1D43B5C420B091C800B0ABFC /* Options.swift in Sources */,
+				1D43B5B920B06C2900B0ABFC /* Initialize.swift in Sources */,
 				1DDC8F6D20AFB96500BCE107 /* AdminViewController.swift in Sources */,
+				1D43B5C620B091C800B0ABFC /* AllowedOrigins.swift in Sources */,
 				1DDC8F7B20AFB99700BCE107 /* ViewController.swift in Sources */,
+				1D43B5C720B091C800B0ABFC /* RouterCreator.swift in Sources */,
 				1DDC8F7020AFB97900BCE107 /* BazaarViewController.swift in Sources */,
-				1DDC8F6720AF1EF400BCE107 /* CORS.swift in Sources */,
+				1D43B5BB20B07A6300B0ABFC /* SQLHelper.swift in Sources */,
 				1DDC8EBC20AE57BD00BCE107 /* AppDelegate.swift in Sources */,
 				1DDC8F7120AFB97900BCE107 /* Constants.swift in Sources */,
 			);
@@ -602,7 +622,10 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../iOSStaticLibraries/Curl/lib";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../iOSStaticLibraries/Curl/lib";
-				"OTHER_LDFLAGS[arch=*]" = "-ObjC -lz";
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-ObjC",
+					"-lz",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = Subsect.SubsectServer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(inherited) $(PROJECT_DIR)/modmap";
@@ -633,8 +656,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(inherited) $(PROJECT_DIR)";
-				"OTHER_LDFLAGS[arch=*]" = "-ObjC -lz";
+				"LIBRARY_SEARCH_PATHS[arch=*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-ObjC",
+					"-lz",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = Subsect.SubsectServer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"SWIFT_INCLUDE_PATHS[arch=*]" = "";

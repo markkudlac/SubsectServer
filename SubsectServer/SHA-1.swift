@@ -8,8 +8,6 @@
 
 import Foundation
 
-import Foundation
-
 /// Left rotation (or cyclic shift) operator
 infix operator <<< : BitwiseShiftPrecedence
 private func <<< (lhs:UInt32, rhs:UInt32) -> UInt32 {
