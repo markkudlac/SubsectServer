@@ -13,7 +13,7 @@
         <!--Server-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SubServiOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SubsectServer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -34,7 +34,7 @@
                     <navigationItem key="navigationItem" title="Server" id="xfD-f5-hsK">
                         <barButtonItem key="leftBarButtonItem" title="Bazaar" id="f21-yq-eBW">
                             <connections>
-                                <segue destination="xFs-qB-8Th" kind="show" id="U92-Hb-rp3"/>
+                                <segue destination="1Oe-R0-eYw" kind="show" id="vmF-jk-TR2"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Setup" id="4ln-28-CvE">
@@ -54,7 +54,7 @@
         <!--Setup-->
         <scene sceneID="M8s-cH-nLU">
             <objects>
-                <viewController id="whs-4I-QJn" customClass="SetupViewController" customModule="SubServiOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="whs-4I-QJn" customClass="SetupViewController" customModule="SubsectServer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="O5g-Ok-Vt3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -111,25 +111,58 @@
             <point key="canvasLocation" x="1437.5999999999999" y="-90.404797601199405"/>
         </scene>
         <!--Bazaar-->
-        <scene sceneID="C3j-up-w3W">
+        <scene sceneID="NP5-gx-q2u">
             <objects>
-                <viewController id="xFs-qB-8Th" customClass="BazaarViewController" customModule="SubServiOS" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="oCg-Py-2TS">
+                <tableViewController title="Bazaar" id="1Oe-R0-eYw" customClass="BazaarTableViewController" customModule="SubsectServer" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="q9A-vw-YP8" userLabel="BazaarTableView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="c8V-SR-ALG"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Bazaar" id="wva-gi-7fA"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="t6b-L8-Yt7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BazaarTableViewCell" rowHeight="80" id="2Rm-jh-KzZ" customClass="BazaarTableViewCell" customModule="SubsectServer" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="80"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2Rm-jh-KzZ" id="cgS-e4-gjl" customClass="BazaarTableViewCell" customModule="SubsectServer" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oHj-WD-U6V">
+                                            <rect key="frame" x="229" y="5" width="60" height="60"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WlG-th-ZXr">
+                                            <rect key="frame" x="44" y="5" width="148" height="64"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                            <state key="normal" title="Button">
+                                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="appInstall:" destination="2Rm-jh-KzZ" eventType="touchUpInside" id="ZF9-Ep-EKt"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="appIcon" destination="oHj-WD-U6V" id="Qpy-AL-hIc"/>
+                                    <outlet property="appTitle" destination="WlG-th-ZXr" id="r7g-FO-gd5"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="1Oe-R0-eYw" id="WC8-fd-en2"/>
+                            <outlet property="delegate" destination="1Oe-R0-eYw" id="e2f-Rl-OlF"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7y0-il-UcB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1329" y="273"/>
+            <point key="canvasLocation" x="1229.5999999999999" y="326.98650674662673"/>
         </scene>
         <!--Admin-->
         <scene sceneID="oFW-6H-UtA">
             <objects>
-                <viewController id="iZH-ew-Mhp" customClass="AdminViewController" customModule="SubServiOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="iZH-ew-Mhp" customClass="AdminViewController" customModule="SubsectServer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="O12-Ig-zhC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

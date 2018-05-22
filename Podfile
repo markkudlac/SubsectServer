@@ -7,5 +7,6 @@ target 'SubsectServer' do
 
   # Pods for SubsectServer
 pod 'NVHTarGzip'
-
+pod 'Squeal'
+pod 'SwiftyJSON', '~> 4.0'
 end

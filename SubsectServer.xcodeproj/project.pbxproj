@@ -13,6 +13,8 @@
 		1D43B5C520B091C800B0ABFC /* CORS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5C120B091C800B0ABFC /* CORS.swift */; };
 		1D43B5C620B091C800B0ABFC /* AllowedOrigins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5C220B091C800B0ABFC /* AllowedOrigins.swift */; };
 		1D43B5C720B091C800B0ABFC /* RouterCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5C320B091C800B0ABFC /* RouterCreator.swift */; };
+		1D978FF020B33F510021DB7A /* BazaarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D978FEF20B33F510021DB7A /* BazaarTableViewController.swift */; };
+		1D978FF220B3A5E10021DB7A /* BazaarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D978FF120B3A5E10021DB7A /* BazaarTableViewCell.swift */; };
 		1DDC8EBC20AE57BD00BCE107 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8EBB20AE57BD00BCE107 /* AppDelegate.swift */; };
 		1DDC8EC320AE57BE00BCE107 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DDC8EC220AE57BE00BCE107 /* Assets.xcassets */; };
 		1DDC8EC620AE57BE00BCE107 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1DDC8EC420AE57BE00BCE107 /* LaunchScreen.storyboard */; };
@@ -37,7 +39,6 @@
 		1DDC8F5E20AF1A0800BCE107 /* CHTTPParser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1DDC8F5C20AF1A0800BCE107 /* CHTTPParser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1DDC8F6B20AF2C4100BCE107 /* public in Resources */ = {isa = PBXBuildFile; fileRef = 1DDC8F6A20AF2C4100BCE107 /* public */; };
 		1DDC8F6D20AFB96500BCE107 /* AdminViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F6C20AFB96500BCE107 /* AdminViewController.swift */; };
-		1DDC8F7020AFB97900BCE107 /* BazaarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F6E20AFB97900BCE107 /* BazaarViewController.swift */; };
 		1DDC8F7120AFB97900BCE107 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F6F20AFB97900BCE107 /* Constants.swift */; };
 		1DDC8F7720AFB99700BCE107 /* SetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F7220AFB99700BCE107 /* SetupViewController.swift */; };
 		1DDC8F7820AFB99700BCE107 /* SHA-1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC8F7320AFB99700BCE107 /* SHA-1.swift */; };
@@ -77,6 +78,8 @@
 		1D43B5C120B091C800B0ABFC /* CORS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CORS.swift; sourceTree = "<group>"; };
 		1D43B5C220B091C800B0ABFC /* AllowedOrigins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllowedOrigins.swift; sourceTree = "<group>"; };
 		1D43B5C320B091C800B0ABFC /* RouterCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouterCreator.swift; sourceTree = "<group>"; };
+		1D978FEF20B33F510021DB7A /* BazaarTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BazaarTableViewController.swift; sourceTree = "<group>"; };
+		1D978FF120B3A5E10021DB7A /* BazaarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BazaarTableViewCell.swift; sourceTree = "<group>"; };
 		1DDC8EB820AE57BD00BCE107 /* SubsectServer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SubsectServer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DDC8EBB20AE57BD00BCE107 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1DDC8EC220AE57BE00BCE107 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -120,7 +123,6 @@
 		1DDC8F1220AE600200BCE107 /* Socket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Socket.framework; sourceTree = "<group>"; };
 		1DDC8F3520AE732E00BCE107 /* CHTTPParser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CHTTPParser.framework; path = "../../Library/Developer/Xcode/DerivedData/EndToEnd-gpmyqsozczwqtuckhcupzsytpzmk/Build/Products/Debug-iphoneos/CHTTPParser.framework"; sourceTree = "<group>"; };
 		1DDC8F3A20AE7FA400BCE107 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = modmap/module.modulemap; sourceTree = "<group>"; };
-		1DDC8F5A20AF19A300BCE107 /* CHTTPParser 10-21-57-568.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CHTTPParser 10-21-57-568.framework"; path = "../../.Trash/CHTTPParser 10-21-57-568.framework"; sourceTree = "<group>"; };
 		1DDC8F5C20AF1A0800BCE107 /* CHTTPParser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CHTTPParser.framework; sourceTree = "<group>"; };
 		1DDC8F6220AF1EF400BCE107 /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		1DDC8F6320AF1EF400BCE107 /* CORS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CORS.swift; sourceTree = "<group>"; };
@@ -128,7 +130,6 @@
 		1DDC8F6520AF1EF400BCE107 /* RouterCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouterCreator.swift; sourceTree = "<group>"; };
 		1DDC8F6A20AF2C4100BCE107 /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		1DDC8F6C20AFB96500BCE107 /* AdminViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminViewController.swift; sourceTree = "<group>"; };
-		1DDC8F6E20AFB97900BCE107 /* BazaarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BazaarViewController.swift; sourceTree = "<group>"; };
 		1DDC8F6F20AFB97900BCE107 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		1DDC8F7220AFB99700BCE107 /* SetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupViewController.swift; sourceTree = "<group>"; };
 		1DDC8F7320AFB99700BCE107 /* SHA-1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SHA-1.swift"; sourceTree = "<group>"; };
@@ -210,7 +211,8 @@
 			children = (
 				1DDC8EBB20AE57BD00BCE107 /* AppDelegate.swift */,
 				1DDC8F6C20AFB96500BCE107 /* AdminViewController.swift */,
-				1DDC8F6E20AFB97900BCE107 /* BazaarViewController.swift */,
+				1D978FEF20B33F510021DB7A /* BazaarTableViewController.swift */,
+				1D978FF120B3A5E10021DB7A /* BazaarTableViewCell.swift */,
 				1DDC8F6F20AFB97900BCE107 /* Constants.swift */,
 				1DDC8F7420AFB99700BCE107 /* Main.storyboard */,
 				1DDC8F7220AFB99700BCE107 /* SetupViewController.swift */,
@@ -231,7 +233,6 @@
 		1DDC8ECD20AE581000BCE107 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1DDC8F5A20AF19A300BCE107 /* CHTTPParser 10-21-57-568.framework */,
 				1DDC8F3520AE732E00BCE107 /* CHTTPParser.framework */,
 				1DDC8EDE20AE584D00BCE107 /* SSLService.framework */,
 				1DDC8EDC20AE584800BCE107 /* Socket.framework */,
@@ -423,10 +424,14 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-SubsectServer/Pods-SubsectServer-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/NVHTarGzip/NVHTarGzip.framework",
+				"${BUILT_PRODUCTS_DIR}/Squeal/Squeal.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVHTarGzip.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Squeal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -458,6 +463,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D978FF020B33F510021DB7A /* BazaarTableViewController.swift in Sources */,
 				1D43B5C520B091C800B0ABFC /* CORS.swift in Sources */,
 				1DDC8F7820AFB99700BCE107 /* SHA-1.swift in Sources */,
 				1DDC8F7720AFB99700BCE107 /* SetupViewController.swift in Sources */,
@@ -468,10 +474,10 @@
 				1D43B5C620B091C800B0ABFC /* AllowedOrigins.swift in Sources */,
 				1DDC8F7B20AFB99700BCE107 /* ViewController.swift in Sources */,
 				1D43B5C720B091C800B0ABFC /* RouterCreator.swift in Sources */,
-				1DDC8F7020AFB97900BCE107 /* BazaarViewController.swift in Sources */,
 				1D43B5BB20B07A6300B0ABFC /* SQLHelper.swift in Sources */,
 				1DDC8EBC20AE57BD00BCE107 /* AppDelegate.swift in Sources */,
 				1DDC8F7120AFB97900BCE107 /* Constants.swift in Sources */,
+				1D978FF220B3A5E10021DB7A /* BazaarTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,7 +6,7 @@
 //  Copyright © 2018 Mark Kudlac. All rights reserved.
 //
 
-import SQLite3
+//import SQLite3
 import UIKit
 import WebKit
 
@@ -26,7 +26,6 @@ class ServerWebView : WKWebView {
 class ViewController: UIViewController {
     
     @IBOutlet weak var webView: ServerWebView!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -142,7 +141,6 @@ extension ViewController : WKNavigationDelegate {
  //       callJavascript(script: "test2JS(23)")
     }
     
-
 
 }
 

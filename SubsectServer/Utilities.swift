@@ -30,6 +30,11 @@ class Utilities {
         }
         return false
     }
+    
+    static func getTimeNow() -> Int64 {
+        // current UNIX time in milliseconds
+        return Int64(Date().timeIntervalSince1970) * 1000
+    }
 }
 
 

@@ -21,6 +21,7 @@ enum CONST {
     static let subServ = "subserv";
     static let dbSys = "S_";
     static let dbUsr = "U_";
+    static let subHrefRempte = "Sub_Href_Remote"
     static let sqlExt = ".sqlite3"
     static let dbsubServ = dbSys + subServ + sqlExt
 
