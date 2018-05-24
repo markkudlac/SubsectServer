@@ -18,6 +18,7 @@
 import Kitura
 import LoggerAPI
 import CoreSpotlight
+import SwiftyJSON
 
 
 public struct RouterCreator {
@@ -33,11 +34,20 @@ public struct RouterCreator {
         
         router.all("/", middleware: cors)
         
-        router.get("/api/getMenu/*") { _, response, _ in
+        router.get(CONST.apiPath + CONST.getMenu + ":funcid") { request, response, _ in
             
-            print("In getMenu response new")
+            print("In getMenu funcid : \(request.parameters["funcid"]!)")
+            
+            
+       //     let jsonData = [{"rtn": "true", "db": "0", "funcid": "func123"}]
+            let jray : JSON = [
+                ["rtn": true, "db": 0, "funcid": "\(request.parameters["funcid"]!)"]
+            ]
+            
+            print("jray : \(jray.rawString(options: [])!)" )
             do {
-               try response.send("Subsect getMenu API").end()
+                
+               try response.send(jray.rawString(options: [])!).end()
             } catch {
                Log.error("Caught an error while sending a response: \(error)")
             }

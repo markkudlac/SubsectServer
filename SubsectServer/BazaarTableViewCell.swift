@@ -15,6 +15,7 @@ class BazaarTableViewCell: UITableViewCell {
     @IBOutlet weak var appTitle: UIButton!
     @IBOutlet weak var appIcon: UIImageView!
     
+    @IBOutlet weak var appCell: BazaarTableViewCell!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,7 +28,11 @@ class BazaarTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-    @IBAction func appInstall(_ sender: UIButton) {
+    @IBAction func appHelp(_ sender: UIButton) {
         print("Title tap : \(sender.tag)")
     }
+    
+    
+    
+    
 }

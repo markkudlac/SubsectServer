@@ -9,6 +9,8 @@
 import Foundation
 
 enum CONST {
+    static let internalPort = 8080
+    
     static let hostName = "hostName"
     static let hostPassword = "hostPassword"
     static let hostEmail = "hostEmail"
@@ -18,6 +20,9 @@ enum CONST {
     static let defaultPort = 8080
     static let launchedBefore = "hasBeenLaunchedBeforeFlag"
     
+    static let httpProt = "http"
+    static let apiPath = "/api/"
+    static let getMenu = "getMenu/"
     static let subServ = "subserv";
     static let dbSys = "S_";
     static let dbUsr = "U_";

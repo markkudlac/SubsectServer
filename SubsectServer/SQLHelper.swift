@@ -62,7 +62,7 @@ class SQLHelper {
     /*
         initializeRegistry(app: "Testapp", sys: true, icon: "Hello icon", subsectId: 12345, title: "Title for test", permissions: "XYZ")
  */
-        testDump(tableName : CONST.tableRegistry)
+  //      testDump(tableName : CONST.tableRegistry)
         
         return true
     }

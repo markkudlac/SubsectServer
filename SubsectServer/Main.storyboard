@@ -126,7 +126,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oHj-WD-U6V">
+                                        <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oHj-WD-U6V">
                                             <rect key="frame" x="229" y="5" width="60" height="60"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
@@ -138,12 +138,13 @@
                                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </state>
                                             <connections>
-                                                <action selector="appInstall:" destination="2Rm-jh-KzZ" eventType="touchUpInside" id="ZF9-Ep-EKt"/>
+                                                <action selector="appHelp:" destination="2Rm-jh-KzZ" eventType="touchUpInside" id="ZF9-Ep-EKt"/>
                                             </connections>
                                         </button>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="appCell" destination="cgS-e4-gjl" id="def-Od-Xri"/>
                                     <outlet property="appIcon" destination="oHj-WD-U6V" id="Qpy-AL-hIc"/>
                                     <outlet property="appTitle" destination="WlG-th-ZXr" id="r7g-FO-gd5"/>
                                 </connections>

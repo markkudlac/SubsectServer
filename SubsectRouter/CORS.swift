@@ -20,7 +20,7 @@ import Foundation
 // MARK CORS
 
 /// Cross-Origin Resource Sharing [CORS](https://www.w3.org/TR/cors/) middleware.
-public class CORS: RouterMiddleware {
+public class CORS : RouterMiddleware {
     
     private let options: Options
     

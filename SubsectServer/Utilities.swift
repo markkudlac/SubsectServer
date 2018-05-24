@@ -35,6 +35,20 @@ class Utilities {
         // current UNIX time in milliseconds
         return Int64(Date().timeIntervalSince1970) * 1000
     }
+    
+    
+    static func getNameServer() -> String {
+        
+        var nameServer = CONST.defaultServer
+        let defaults = UserDefaults.standard
+        
+        if nil != defaults.string(forKey: CONST.alternateServer) &&
+            !UserDefaults.standard.bool(forKey: CONST.selectServer) {
+            nameServer = defaults.string(forKey: CONST.alternateServer)!
+        }
+        
+        return nameServer
+    }
 }
 
 

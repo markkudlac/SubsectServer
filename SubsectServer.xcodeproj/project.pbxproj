@@ -31,7 +31,6 @@
 		1DDC8F0C20AE5FF400BCE107 /* KituraNet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1DDC8F0820AE5FF400BCE107 /* KituraNet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1DDC8F0E20AE5FF400BCE107 /* KituraTemplateEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1DDC8F0920AE5FF400BCE107 /* KituraTemplateEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1DDC8F1020AE5FF400BCE107 /* LoggerAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1DDC8F0A20AE5FF400BCE107 /* LoggerAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		1DDC8F1320AE600200BCE107 /* SSLService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DDC8F1120AE600200BCE107 /* SSLService.framework */; };
 		1DDC8F1420AE600200BCE107 /* SSLService.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1DDC8F1120AE600200BCE107 /* SSLService.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1DDC8F1520AE600200BCE107 /* Socket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DDC8F1220AE600200BCE107 /* Socket.framework */; };
 		1DDC8F1620AE600200BCE107 /* Socket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1DDC8F1220AE600200BCE107 /* Socket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -94,25 +93,6 @@
 		1DDC8EDC20AE584800BCE107 /* Socket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Socket.framework; path = "../../Library/Developer/Xcode/DerivedData/EndToEnd-gpmyqsozczwqtuckhcupzsytpzmk/Build/Products/Debug-iphoneos/Socket.framework"; sourceTree = "<group>"; };
 		1DDC8EDE20AE584D00BCE107 /* SSLService.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SSLService.framework; path = "../../Library/Developer/Xcode/DerivedData/EndToEnd-gpmyqsozczwqtuckhcupzsytpzmk/Build/Products/Debug-iphoneos/SSLService.framework"; sourceTree = "<group>"; };
 		1DDC8EE220AE5BC100BCE107 /* SubsectServer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SubsectServer-Bridging-Header.h"; sourceTree = "<group>"; };
-		1DDC8EE720AE5CF600BCE107 /* curlrules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curlrules.h; sourceTree = "<group>"; };
-		1DDC8EE820AE5CF600BCE107 /* stdcheaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdcheaders.h; sourceTree = "<group>"; };
-		1DDC8EE920AE5CF600BCE107 /* mprintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mprintf.h; sourceTree = "<group>"; };
-		1DDC8EEA20AE5CF600BCE107 /* easy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = easy.h; sourceTree = "<group>"; };
-		1DDC8EEB20AE5CF600BCE107 /* curl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curl.h; sourceTree = "<group>"; };
-		1DDC8EEC20AE5CF600BCE107 /* curlver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curlver.h; sourceTree = "<group>"; };
-		1DDC8EED20AE5CF600BCE107 /* typecheck-gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "typecheck-gcc.h"; sourceTree = "<group>"; };
-		1DDC8EEE20AE5CF600BCE107 /* multi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = multi.h; sourceTree = "<group>"; };
-		1DDC8EEF20AE5CF600BCE107 /* curlbuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curlbuild.h; sourceTree = "<group>"; };
-		1DDC8EF120AE5CF600BCE107 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcurl.a; sourceTree = "<group>"; };
-		1DDC8EF420AE5CF600BCE107 /* curlrules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curlrules.h; sourceTree = "<group>"; };
-		1DDC8EF520AE5CF600BCE107 /* stdcheaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdcheaders.h; sourceTree = "<group>"; };
-		1DDC8EF620AE5CF600BCE107 /* mprintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mprintf.h; sourceTree = "<group>"; };
-		1DDC8EF720AE5CF600BCE107 /* easy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = easy.h; sourceTree = "<group>"; };
-		1DDC8EF820AE5CF600BCE107 /* curl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curl.h; sourceTree = "<group>"; };
-		1DDC8EF920AE5CF600BCE107 /* curlver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curlver.h; sourceTree = "<group>"; };
-		1DDC8EFA20AE5CF600BCE107 /* typecheck-gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "typecheck-gcc.h"; sourceTree = "<group>"; };
-		1DDC8EFB20AE5CF600BCE107 /* multi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = multi.h; sourceTree = "<group>"; };
-		1DDC8EFC20AE5CF600BCE107 /* curlbuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curlbuild.h; sourceTree = "<group>"; };
 		1DDC8EFE20AE5FD500BCE107 /* KituraContracts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KituraContracts.framework; sourceTree = "<group>"; };
 		1DDC8EFF20AE5FD500BCE107 /* HeliumLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HeliumLogger.framework; sourceTree = "<group>"; };
 		1DDC8F0020AE5FD500BCE107 /* Kitura.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Kitura.framework; sourceTree = "<group>"; };
@@ -124,10 +104,6 @@
 		1DDC8F3520AE732E00BCE107 /* CHTTPParser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CHTTPParser.framework; path = "../../Library/Developer/Xcode/DerivedData/EndToEnd-gpmyqsozczwqtuckhcupzsytpzmk/Build/Products/Debug-iphoneos/CHTTPParser.framework"; sourceTree = "<group>"; };
 		1DDC8F3A20AE7FA400BCE107 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = modmap/module.modulemap; sourceTree = "<group>"; };
 		1DDC8F5C20AF1A0800BCE107 /* CHTTPParser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CHTTPParser.framework; sourceTree = "<group>"; };
-		1DDC8F6220AF1EF400BCE107 /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
-		1DDC8F6320AF1EF400BCE107 /* CORS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CORS.swift; sourceTree = "<group>"; };
-		1DDC8F6420AF1EF400BCE107 /* AllowedOrigins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllowedOrigins.swift; sourceTree = "<group>"; };
-		1DDC8F6520AF1EF400BCE107 /* RouterCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouterCreator.swift; sourceTree = "<group>"; };
 		1DDC8F6A20AF2C4100BCE107 /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		1DDC8F6C20AFB96500BCE107 /* AdminViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminViewController.swift; sourceTree = "<group>"; };
 		1DDC8F6F20AFB97900BCE107 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -147,16 +123,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DDC8ED320AE582600BCE107 /* Kitura.framework in Frameworks */,
 				1DDC8F0120AE5FD600BCE107 /* KituraContracts.framework in Frameworks */,
 				1DDC8ED720AE583900BCE107 /* KituraNet.framework in Frameworks */,
 				1DDC8ED920AE583F00BCE107 /* KituraTemplateEngine.framework in Frameworks */,
 				1DDC8EDF20AE584D00BCE107 /* SSLService.framework in Frameworks */,
 				1DDC8EDB20AE584400BCE107 /* LoggerAPI.framework in Frameworks */,
-				1DDC8F1320AE600200BCE107 /* SSLService.framework in Frameworks */,
 				1DDC8F5D20AF1A0800BCE107 /* CHTTPParser.framework in Frameworks */,
 				1DDC8F1520AE600200BCE107 /* Socket.framework in Frameworks */,
 				1DDC8F0320AE5FD600BCE107 /* HeliumLogger.framework in Frameworks */,
-				1DDC8ED320AE582600BCE107 /* Kitura.framework in Frameworks */,
 				22AAB7A57D831B9681FE9B31 /* Pods_SubsectServer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -179,7 +154,6 @@
 			isa = PBXGroup;
 			children = (
 				1DDC8F5C20AF1A0800BCE107 /* CHTTPParser.framework */,
-				1DDC8F3A20AE7FA400BCE107 /* module.modulemap */,
 				1DDC8F1220AE600200BCE107 /* Socket.framework */,
 				1DDC8F1120AE600200BCE107 /* SSLService.framework */,
 				1DDC8F0820AE5FF400BCE107 /* KituraNet.framework */,
@@ -192,7 +166,8 @@
 				1DDC8EB920AE57BD00BCE107 /* Products */,
 				1DDC8F7C20AFBAE800BCE107 /* ServerAssets */,
 				1DDC8F6A20AF2C4100BCE107 /* public */,
-				1DDC8EE320AE5CF600BCE107 /* iOSStaticLibraries */,
+				1DDC8F3A20AE7FA400BCE107 /* module.modulemap */,
+				1D43B5BF20B091C800B0ABFC /* SubsectRouter */,
 				1DDC8ECD20AE581000BCE107 /* Frameworks */,
 				3319BFD9CE306F3DDED72D86 /* Pods */,
 			);
@@ -225,7 +200,6 @@
 				1DDC8EE220AE5BC100BCE107 /* SubsectServer-Bridging-Header.h */,
 				1D43B5B820B06C2900B0ABFC /* Initialize.swift */,
 				1D43B5BA20B07A6300B0ABFC /* SQLHelper.swift */,
-				1D43B5BF20B091C800B0ABFC /* SubsectRouter */,
 			);
 			path = SubsectServer;
 			sourceTree = "<group>";
@@ -245,94 +219,6 @@
 				5C3FE2ABB785FC98E916DDC5 /* Pods_SubsectServer.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		1DDC8EE320AE5CF600BCE107 /* iOSStaticLibraries */ = {
-			isa = PBXGroup;
-			children = (
-				1DDC8F6120AF1EF400BCE107 /* SubsectRouter */,
-				1DDC8EE420AE5CF600BCE107 /* Curl */,
-			);
-			name = iOSStaticLibraries;
-			path = ../../hold/SubsectServer/iOSStaticLibraries;
-			sourceTree = "<group>";
-		};
-		1DDC8EE420AE5CF600BCE107 /* Curl */ = {
-			isa = PBXGroup;
-			children = (
-				1DDC8EE520AE5CF600BCE107 /* include-64 */,
-				1DDC8EF020AE5CF600BCE107 /* lib */,
-				1DDC8EF220AE5CF600BCE107 /* include-32 */,
-			);
-			path = Curl;
-			sourceTree = "<group>";
-		};
-		1DDC8EE520AE5CF600BCE107 /* include-64 */ = {
-			isa = PBXGroup;
-			children = (
-				1DDC8EE620AE5CF600BCE107 /* curl */,
-			);
-			path = "include-64";
-			sourceTree = "<group>";
-		};
-		1DDC8EE620AE5CF600BCE107 /* curl */ = {
-			isa = PBXGroup;
-			children = (
-				1DDC8EE720AE5CF600BCE107 /* curlrules.h */,
-				1DDC8EE820AE5CF600BCE107 /* stdcheaders.h */,
-				1DDC8EE920AE5CF600BCE107 /* mprintf.h */,
-				1DDC8EEA20AE5CF600BCE107 /* easy.h */,
-				1DDC8EEB20AE5CF600BCE107 /* curl.h */,
-				1DDC8EEC20AE5CF600BCE107 /* curlver.h */,
-				1DDC8EED20AE5CF600BCE107 /* typecheck-gcc.h */,
-				1DDC8EEE20AE5CF600BCE107 /* multi.h */,
-				1DDC8EEF20AE5CF600BCE107 /* curlbuild.h */,
-			);
-			path = curl;
-			sourceTree = "<group>";
-		};
-		1DDC8EF020AE5CF600BCE107 /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				1DDC8EF120AE5CF600BCE107 /* libcurl.a */,
-			);
-			path = lib;
-			sourceTree = "<group>";
-		};
-		1DDC8EF220AE5CF600BCE107 /* include-32 */ = {
-			isa = PBXGroup;
-			children = (
-				1DDC8EF320AE5CF600BCE107 /* curl */,
-			);
-			path = "include-32";
-			sourceTree = "<group>";
-		};
-		1DDC8EF320AE5CF600BCE107 /* curl */ = {
-			isa = PBXGroup;
-			children = (
-				1DDC8EF420AE5CF600BCE107 /* curlrules.h */,
-				1DDC8EF520AE5CF600BCE107 /* stdcheaders.h */,
-				1DDC8EF620AE5CF600BCE107 /* mprintf.h */,
-				1DDC8EF720AE5CF600BCE107 /* easy.h */,
-				1DDC8EF820AE5CF600BCE107 /* curl.h */,
-				1DDC8EF920AE5CF600BCE107 /* curlver.h */,
-				1DDC8EFA20AE5CF600BCE107 /* typecheck-gcc.h */,
-				1DDC8EFB20AE5CF600BCE107 /* multi.h */,
-				1DDC8EFC20AE5CF600BCE107 /* curlbuild.h */,
-			);
-			path = curl;
-			sourceTree = "<group>";
-		};
-		1DDC8F6120AF1EF400BCE107 /* SubsectRouter */ = {
-			isa = PBXGroup;
-			children = (
-				1DDC8F6220AF1EF400BCE107 /* Options.swift */,
-				1DDC8F6320AF1EF400BCE107 /* CORS.swift */,
-				1DDC8F6420AF1EF400BCE107 /* AllowedOrigins.swift */,
-				1DDC8F6520AF1EF400BCE107 /* RouterCreator.swift */,
-			);
-			name = SubsectRouter;
-			path = ../ServerSide/Sources/SubsectRouter;
 			sourceTree = "<group>";
 		};
 		3319BFD9CE306F3DDED72D86 /* Pods */ = {
@@ -613,6 +499,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AF75C78E3B6BF267E65D8C50 /* Pods-SubsectServer.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JRPQQMSH3K;
@@ -620,14 +507,16 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				"HEADER_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../iOSStaticLibraries/Curl/include-64";
+				"HEADER_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR) ";
 				INFOPLIST_FILE = SubsectServer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../iOSStaticLibraries/Curl/lib";
-				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../iOSStaticLibraries/Curl/lib";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				"OTHER_LDFLAGS[arch=*]" = (
 					"-ObjC",
 					"-lz",
@@ -645,6 +534,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 206E0264C07415395E73B37C /* Pods-SubsectServer.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JRPQQMSH3K;
@@ -652,17 +542,13 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				"HEADER_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../iOSStaticLibraries/Curl/include-64";
+				"HEADER_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)";
 				INFOPLIST_FILE = SubsectServer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				"LIBRARY_SEARCH_PATHS[arch=*]" = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);

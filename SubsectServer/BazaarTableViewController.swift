@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftyJSON
+import NVHTarGzip
+
 
 class BazaarTableViewController: UITableViewController {
     
@@ -50,6 +52,22 @@ class BazaarTableViewController: UITableViewController {
         return 10
     }
     
+   
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let curCell = tableView.cellForRow(at: indexPath) as! BazaarTableViewCell
+        
+        let alert = UIAlertController(title: "Install", message: "Would you like to install \(curCell.appTitle.currentTitle!)", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+            self.installApp(subsectId: curCell.tag)
+        }))
+        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true)
+    }
+    
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
             let cellIdent = "BazaarTableViewCell"
@@ -60,8 +78,10 @@ class BazaarTableViewController: UITableViewController {
         }
 
         if (appList != nil && indexPath.row < appList.count){
-            cell!.appTitle.setTitle(appList[indexPath.row]["pkgname"].string, for: .normal)
-            cell!.appTitle.tag = indexPath.row
+            cell!.appTitle.setTitle(appList[indexPath.row]["title"].string, for: .normal)
+            cell!.appTitle.tag = appList[indexPath.row]["id"].int!
+            
+            cell!.tag = appList[indexPath.row]["id"].int!
             
             var str64 = appList[indexPath.row]["icon"].string
             str64 = str64!.replacingOccurrences(of: "data:image/png;base64,", with: "")
@@ -74,7 +94,6 @@ class BazaarTableViewController: UITableViewController {
         }
  
         return cell!
- 
     }
     
 
@@ -96,13 +115,12 @@ class BazaarTableViewController: UITableViewController {
         
         xdataTask?.cancel()
         
-        if var urlComponents = URLComponents(string: "http://192.168.2.60:3000/api/listapps") {
+        if var urlComponents = URLComponents(string: "\(CONST.httpProt)://\(Utilities.getNameServer())\(CONST.apiPath)listapps") {
             
             guard let url = urlComponents.url else { return }
-            
             xdataTask = defaultSession.dataTask(with: url) { data, response, error in
                 defer {
-                    print("In defer statement")
+            //        print("In defer statement")
                     self.xdataTask = nil
                 }
                 
@@ -119,7 +137,6 @@ class BazaarTableViewController: UITableViewController {
                             DispatchQueue.main.async(execute: { () -> Void in
                                 self.tableView.reloadData()
                             })
-                            
                         }
                     } else {
                         print("some response fail : \(response!.statusCode)")
@@ -131,4 +148,91 @@ class BazaarTableViewController: UITableViewController {
     }
     
     
+    
+    func installApp(subsectId: Int) {
+        
+        let defaultSession = URLSession.shared
+        var xdownldTask: URLSessionDownloadTask?
+        
+        xdataTask?.cancel()
+        
+        if var urlComponents = URLComponents(string: "\(CONST.httpProt)://\(Utilities.getNameServer())\(CONST.apiPath)serve/\(subsectId)") {
+            
+            guard let url = urlComponents.url else { return }
+            xdataTask = defaultSession.dataTask(with: url) { data, response, error in
+                defer {
+                    //        print("In defer statement")
+                    self.xdataTask = nil
+                }
+                
+                if error != nil {
+                    print ("DataTask error: " + error!.localizedDescription)
+                } else {
+                    let response = response as? HTTPURLResponse
+                    if response!.statusCode == 200 {
+                        //       print("Resonse was 200")
+                        let appZip = JSON(data!)
+                        if let jerr = appZip["error"]["code"].string {
+                            print("JSON Error : \(jerr)")
+                        } else {
+                            print("Got appZip : \(appZip["pkgname"].string!)")
+                            self.installZip(zipFile: appZip["zipfile"].string!, packageName: appZip["pkgname"].string!)
+                        }
+                    } else {
+                        print("some response fail : \(response!.statusCode)")
+                    }
+                }
+            }
+            xdataTask?.resume()
+        }
+    }
+    
+    
+    func installZip(zipFile: String, packageName: String){
+        
+        let xtar = NVHTarGzip.init()
+        
+        do {
+            let xtmpfl = TemporaryFileUR(ext: packageName)
+            print("Appzip build tmp path : \(xtmpfl.contentURL.path)")
+            
+            let xdat = Data(base64Encoded: zipFile, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)
+            if xdat == nil {
+                print("base64 invalid")
+            }
+            try xdat!.write(to: xtmpfl.contentURL, options: [] );
+            
+            let fileURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            print("Path : \(fileURL.path)")
+            
+            try xtar.unTarGzipFile(atPath: xtmpfl.contentURL.path, toPath: fileURL.path)
+            print("After tar")
+            //  xdir = FileManager.default.subpaths(atPath: fileURL.path)!
+            let xdir = try! FileManager.default.contentsOfDirectory(atPath: fileURL.path + "/" + packageName)
+            
+            print("Directory documents contents : ")
+            for element in xdir {
+                print(element)
+            }
+        } catch {
+            print("Error for directory write")
+        }
+    }
+}
+
+
+public final class TemporaryFileUR {
+    
+    public let contentURL: URL
+    
+    public init(ext: String) {
+        contentURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension(ext)
+    }
+    
+    deinit {
+        DispatchQueue.global(qos: .utility).async { [contentURL = self.contentURL] in
+            try? FileManager.default.removeItem(at: contentURL) }
+    }
 }

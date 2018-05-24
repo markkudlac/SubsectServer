@@ -39,22 +39,29 @@ class ViewController: UIViewController {
         if let filePath = Bundle.main.path(forResource:"index", ofType:"html", inDirectory: "ServerAssets") {
            
             var hash:String = "X"
-            var nameServer = CONST.defaultServer
-            var hostName = "X"
+            let nameServer = Utilities.getNameServer()
+            var hostName = "mark"
             let fullHost = IPUtility.getMyIP().ip! + ":" + "\(CONST.defaultPort)"
             
             let defaults = UserDefaults.standard
     //        let selectServer = UserDefaults.standard.bool(forKey: CONST.selectServer)
             
     //        print("the value of selectServer : " + String(stringInterpolationSegment: selectServer))
+    
+            // This is just here for testing
+            defaults.set("mark", forKey: CONST.hostName)
+            defaults.set("6149garner", forKey: CONST.hostPassword)
             
+       /*
             if nil != defaults.string(forKey: CONST.alternateServer) &&
                 !UserDefaults.standard.bool(forKey: CONST.selectServer) {
                 nameServer = defaults.string(forKey: CONST.alternateServer)!
             }
-            
+        */
             if let hostNameTmp:String = defaults.string(forKey: CONST.hostName) {
                 hostName = hostNameTmp
+                
+                
                 if let hostPassword = defaults.string(forKey: CONST.hostPassword) {
                     
                     hash = SHA1.hexString(from: hostName + hostPassword)!
@@ -83,7 +90,6 @@ class ViewController: UIViewController {
                         webView.loadHTMLString(html, baseURL: Bundle.main.resourceURL?.appendingPathComponent("ServerAssets"))
                    
                 if !Initialize.start() {
-                    
                     print("Initize failed")
                 }
                 

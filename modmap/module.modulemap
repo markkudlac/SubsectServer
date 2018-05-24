@@ -21,7 +21,7 @@ module CCurl [system] {
 }
 
 module CHTTPParser {
-  //  header "SubsectServer/CHTTPParser/include/CHTTPParser.h"
+   // header "SubsectServer/CHTTPParser/include/CHTTPParser.h"
     link "CHTTPParser"
     export *
 }
