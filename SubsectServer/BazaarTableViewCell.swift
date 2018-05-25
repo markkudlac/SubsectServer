@@ -15,7 +15,7 @@ class BazaarTableViewCell: UITableViewCell {
     @IBOutlet weak var appTitle: UIButton!
     @IBOutlet weak var appIcon: UIImageView!
     
-    @IBOutlet weak var appCell: BazaarTableViewCell!
+   // @IBOutlet weak var appCell: BazaarTableViewCell!
     
     override func awakeFromNib() {
         super.awakeFromNib()

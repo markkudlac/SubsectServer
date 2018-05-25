@@ -19,6 +19,9 @@ enum CONST {
     static let alternateServer = "alternateServer"
     static let defaultPort = 8080
     static let launchedBefore = "hasBeenLaunchedBeforeFlag"
+    static let apps = "Apps/"
+    static let sysDir = "sys"
+    static let usrDir = "usr"
     
     static let httpProt = "http"
     static let apiPath = "/api/"

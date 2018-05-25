@@ -11,7 +11,6 @@ import Kitura
 
 class Initialize {
     
-    
     class func start() -> Bool {
         
      //   if Utilities.isFirstLaunch(){

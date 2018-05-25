@@ -8,22 +8,21 @@
 
 import Foundation
 import Squeal
-
+import SwiftyJSON
 
 class SQLHelper {
     
     private var db : Database!
-    
-    
-    func start() -> Database? {
+
+    init() {
+        print("in db init")
         db = openDatabase(dbname: CONST.dbsubServ)
-        return db
     }
     
     
     func build() -> Bool {
   
-        if start() != nil {
+        if db != nil {
             do {
                 try db.createTable(CONST.tableRegistry, definitions: [
                 "\(CONST.fieldId) INTEGER PRIMARY KEY AUTOINCREMENT",
@@ -68,7 +67,7 @@ class SQLHelper {
     }
         
         
-    func initializeRegistry(app: String, sys: Bool, icon: String, subsectId: Int32, title: String, permissions: String){
+    func initializeRegistry(app: String, sys: Bool, icon: String, subsectId: Int, title: String, permissions: String) -> Bool {
         
         print("In initialize resity insert")
         
@@ -93,28 +92,75 @@ class SQLHelper {
                 values: tmpvals )
         } catch {
             print("Resitry entry failed")
+            return false
         }
+        return true
+    }
+    
+    
+    func getMenu(funcId: String) -> JSON {
+        
+        var jray = Utilities.jsonDbReturn(rtnValue: false, recordId: 0, funcId: funcId)
+        
+        struct DataBucket {
+            var dataDictionary : [String : Bindable]!
+            
+            init(row:Statement) throws {
+                dataDictionary = row.dictionaryValue
+            }
+        }
+        
+        do {
+            let tableBucket:[DataBucket] = try db.selectFrom(
+                CONST.tableRegistry,
+                block: DataBucket.init
+            )
+            
+            for index in 1...tableBucket.count {
+       //     print("Dic : \(tableBucket[0].dataDictionary["title"]!)")
+            print("Dic : \(tableBucket[index - 1].dataDictionary["title"]!)")
+                
+                jray.append(JSON(tableBucket[index - 1].dataDictionary))
+            }
+            
+            jray[0]["db"].int = tableBucket.count
+            jray[0]["rtn"] = true
+            
+            print("JSON jray 2 : \(jray[2])")
+       //     let xray = JSON(tableBucket[0].dataDictionary)
+       //     if let jerr = xray["error"]["code"].string {
+        //        print("JSON Error : \(jerr)")
+       //     }
+            
+       //     print("JSON : \(xray)")
+      //      for element in xray {
+       //     print("JSON : \(xray[0]["title"].string!)")
+       //     }
+  //          print("Dumping \(CONST.tableRegistery) : \(tableBucket[0].dataDictionary)")
+            
+        } catch {
+            print("Testdaump failed")
+        }
+        return JSON(jray)
     }
     
     
     func testDump(tableName : String) {
     
-        struct Contact {
-            var testdic : [String : Bindable]!
+        struct DataBucket {
+            var dataDictionary : [String : Bindable]!
             
             init(row:Statement) throws {
-                
-                testdic = row.dictionaryValue
-                
+                dataDictionary = row.dictionaryValue
             }
         }
         
         do {
-            let contacts:[Contact] = try db.selectFrom(
+            let tableBucket:[DataBucket] = try db.selectFrom(
                 tableName,
-                block: Contact.init
+                block: DataBucket.init
             )
-            print("Dumping : \(contacts[0].testdic)")
+            print("Dumping : \(tableBucket[0].dataDictionary)")
             
         } catch {
             print("Testdaump failed")

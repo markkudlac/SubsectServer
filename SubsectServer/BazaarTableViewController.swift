@@ -13,7 +13,6 @@ import NVHTarGzip
 
 class BazaarTableViewController: UITableViewController {
     
-    
     private var xdataTask: URLSessionDataTask?
     private var appList : JSON!
     
@@ -176,7 +175,21 @@ class BazaarTableViewController: UITableViewController {
                             print("JSON Error : \(jerr)")
                         } else {
                             print("Got appZip : \(appZip["pkgname"].string!)")
-                            self.installZip(zipFile: appZip["zipfile"].string!, packageName: appZip["pkgname"].string!)
+                            
+                            if let installDirectory = self.installZip(zipFile: appZip["zipfile"].string!, packageName: appZip["pkgname"].string!){
+                                
+                                print("Install dir is : \(installDirectory)")
+                                let xdb = SQLHelper()
+                                if xdb.initializeRegistry(app: appZip["pkgname"].string!,
+                                            sys: true, icon: appZip["icon"].string!,
+                                            subsectId: appZip["id"].int!,
+                                            title: appZip["title"].string!,
+                                            permissions: appZip["permissions"].string!) {
+                                    print("registry entry made")
+                                    
+                           //         xdb.testDump(tableName: CONST.tableRegistry)
+                                }
+                            }
                         }
                     } else {
                         print("some response fail : \(response!.statusCode)")
@@ -188,35 +201,45 @@ class BazaarTableViewController: UITableViewController {
     }
     
     
-    func installZip(zipFile: String, packageName: String){
+    func installZip(zipFile: String, packageName: String) -> String? {
         
-        let xtar = NVHTarGzip.init()
+        let zipTar = NVHTarGzip.init()
+        var appsDirectory : String?
         
         do {
-            let xtmpfl = TemporaryFileUR(ext: packageName)
-            print("Appzip build tmp path : \(xtmpfl.contentURL.path)")
+            let tmpDirectory = TemporaryFileUR(ext: packageName)
             
-            let xdat = Data(base64Encoded: zipFile, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)
-            if xdat == nil {
+            let dataBase64 = Data(base64Encoded: zipFile, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)
+            if dataBase64 == nil {
                 print("base64 invalid")
             }
-            try xdat!.write(to: xtmpfl.contentURL, options: [] );
+            try dataBase64!.write(to: tmpDirectory.contentURL, options: [] );
             
-            let fileURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            print("Path : \(fileURL.path)")
+            appsDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(CONST.apps+CONST.sysDir).path
             
-            try xtar.unTarGzipFile(atPath: xtmpfl.contentURL.path, toPath: fileURL.path)
-            print("After tar")
-            //  xdir = FileManager.default.subpaths(atPath: fileURL.path)!
-            let xdir = try! FileManager.default.contentsOfDirectory(atPath: fileURL.path + "/" + packageName)
+            if !FileManager.default.fileExists(atPath: appsDirectory!) {
+                print("Creating directory")
+                try FileManager.default.createDirectory(atPath: appsDirectory!, withIntermediateDirectories: true, attributes: nil)
+            }
+        //    print("Path : \(appsDirectory!)")
             
-            print("Directory documents contents : ")
-            for element in xdir {
+            try zipTar.unTarGzipFile(atPath: tmpDirectory.contentURL.path, toPath: appsDirectory!)
+            appsDirectory = appsDirectory! + "/" + packageName
+           /*
+            let installDirectory = appsDirectory!
+            let installDump = try FileManager.default.contentsOfDirectory(atPath: installDirectory)
+  
+            print("Directory documents contents : \(installDirectory)")
+            for element in installDump {
                 print(element)
             }
+ */
         } catch {
             print("Error for directory write")
+            appsDirectory = nil
         }
+        
+        return appsDirectory
     }
 }
 

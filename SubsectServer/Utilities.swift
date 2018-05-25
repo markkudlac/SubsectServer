@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import SwiftyJSON
+
 
 
 class Utilities {
@@ -49,6 +51,16 @@ class Utilities {
         
         return nameServer
     }
+    
+    
+    static func jsonDbReturn(rtnValue: Bool, recordId: Int, funcId: String) -> [JSON] {
+        
+        return [JSON(
+            ["rtn": rtnValue, "db": recordId, "funcid": funcId]
+        )]
+    }
+    
+    
 }
 
 

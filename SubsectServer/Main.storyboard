@@ -144,7 +144,6 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="appCell" destination="cgS-e4-gjl" id="def-Od-Xri"/>
                                     <outlet property="appIcon" destination="oHj-WD-U6V" id="Qpy-AL-hIc"/>
                                     <outlet property="appTitle" destination="WlG-th-ZXr" id="r7g-FO-gd5"/>
                                 </connections>
