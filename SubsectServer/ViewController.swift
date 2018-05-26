@@ -40,8 +40,8 @@ class ViewController: UIViewController {
            
             var hash:String = "X"
             let nameServer = Utilities.getNameServer()
-            var hostName = "mark"
-            let fullHost = IPUtility.getMyIP().ip! + ":" + "\(CONST.defaultPort)"
+            var hostName = Utilities.getHostName()
+            let fullHost = IPUtility.getMyIP().ip! + ":" + "\(CONST.internalPort)"
             
             let defaults = UserDefaults.standard
     //        let selectServer = UserDefaults.standard.bool(forKey: CONST.selectServer)
@@ -57,7 +57,7 @@ class ViewController: UIViewController {
                 !UserDefaults.standard.bool(forKey: CONST.selectServer) {
                 nameServer = defaults.string(forKey: CONST.alternateServer)!
             }
-        */
+ 
             if let hostNameTmp:String = defaults.string(forKey: CONST.hostName) {
                 hostName = hostNameTmp
                 
@@ -73,7 +73,9 @@ class ViewController: UIViewController {
             } else {
                 print("Host name not set")
             }
+            */
             
+            hash = Utilities.getPassword()!
             do {
          //       if !hash.isEmpty {
                     print("Loading file")

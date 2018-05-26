@@ -11,7 +11,6 @@ import UIKit
 import SwiftyJSON
 
 
-
 class Utilities {
     
     static func setTextFromDefault(field: UITextField, valueTag: String) {
@@ -52,15 +51,94 @@ class Utilities {
         return nameServer
     }
     
-    
-    static func jsonDbReturn(rtnValue: Bool, recordId: Int, funcId: String) -> [JSON] {
+    static func getHostName() -> String {
         
-        return [JSON(
-            ["rtn": rtnValue, "db": recordId, "funcid": funcId]
-        )]
+        var hostName = "mark"
+        if let hostNameTmp = UserDefaults.standard.string(forKey: CONST.hostName) {
+            hostName = hostNameTmp
+        }
+        
+        return hostName
     }
     
     
+    static func jsonDbReturn(rtnValue: Bool, recordId: Int, funcId: String) -> [JSON] {
+        return [
+        JSON(["rtn": rtnValue, "db": recordId, "funcid": funcId])
+        ]
+    }
+    
+    
+    static func useDefaultServer() -> Bool {
+        return UserDefaults.standard.bool(forKey: CONST.selectServer)  ||
+            nil == UserDefaults.standard.string(forKey: CONST.alternateServer)
+    }
+    
+    
+    static func alternatePort() -> String {
+        var port = ""
+        
+        if !useDefaultServer() {
+            let altPort = UserDefaults.standard.string(forKey: CONST.alternateServer)!.components(separatedBy: ":")
+            
+            if altPort.count > 1 {
+                port = ":"+altPort[1]
+            }
+            
+        }
+        return port
+    }
+    
+    
+    static func getPassword() -> String? {
+        var hostName = "mark"
+        var hostPassword = "6149garner"
+        
+        if let hostNameTmp:String = UserDefaults.standard.string(forKey: CONST.hostName) {
+            hostName = hostNameTmp
+        }
+            
+        if let hostPasswordTmp = UserDefaults.standard.string(forKey: CONST.hostPassword) {
+            hostPassword = hostPasswordTmp
+        }
+        
+        var hash = SHA1.hexString(from: hostName + hostPassword)!.replacingOccurrences(of: " ", with: "").lowercased()
+        //      print("SHA-1 : " + hash) // Another String Value
+           
+        return hash
+    }
+    
+    
+    static func setPassword(password: String) -> Bool {
+        
+        return true
+    }
+    
+    
+    static func getToken() -> String {
+        var token = "6"
+        
+        if let tokenTmp:String = UserDefaults.standard.string(forKey: CONST.prefToken) {
+            token = tokenTmp
+        }
+        
+        return token
+    }
+    
+    
+    static func setToken(token: String){
+        
+        UserDefaults.standard.set(token, forKey: CONST.prefToken)
+    }
+    
+    
+    static func generateToken() -> String {
+        var toke = getToken()
+        
+        toke = toke + getPassword()! + String(getTimeNow())
+        toke =  SHA1.hexString(from: toke)!.replacingOccurrences(of: " ", with: "").lowercased()
+        return toke
+    }
 }
 
 

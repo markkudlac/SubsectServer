@@ -21,8 +21,7 @@ class SetupViewController: UIViewController {
         
         Utilities.setTextFromDefault(field: alternateServer, valueTag: CONST.alternateServer)
         
-        if UserDefaults.standard.bool(forKey: CONST.selectServer)  ||
-            nil == UserDefaults.standard.string(forKey: CONST.alternateServer){
+        if Utilities.useDefaultServer(){
             selectServer.setOn(true, animated: false)
         } else {
             selectServer.setOn(false, animated: false)

@@ -175,21 +175,21 @@ class BazaarTableViewController: UITableViewController {
                             print("JSON Error : \(jerr)")
                         } else {
                             print("Got appZip : \(appZip["pkgname"].string!)")
-                            
+                       /*
                             if let installDirectory = self.installZip(zipFile: appZip["zipfile"].string!, packageName: appZip["pkgname"].string!){
                                 
                                 print("Install dir is : \(installDirectory)")
-                                let xdb = SQLHelper()
-                                if xdb.initializeRegistry(app: appZip["pkgname"].string!,
+                                
+                                if SQLHelper(dbName: CONST.dbsubServ).initializeRegistry(app: appZip["pkgname"].string!,
                                             sys: true, icon: appZip["icon"].string!,
                                             subsectId: appZip["id"].int!,
                                             title: appZip["title"].string!,
                                             permissions: appZip["permissions"].string!) {
                                     print("registry entry made")
-                                    
-                           //         xdb.testDump(tableName: CONST.tableRegistry)
-                                }
-                            }
+                            */
+                                    Initialize.createTables(packageName: appZip["pkgname"].string!)
+                            //    }
+                          //  }
                         }
                     } else {
                         print("some response fail : \(response!.statusCode)")
@@ -225,6 +225,7 @@ class BazaarTableViewController: UITableViewController {
             
             try zipTar.unTarGzipFile(atPath: tmpDirectory.contentURL.path, toPath: appsDirectory!)
             appsDirectory = appsDirectory! + "/" + packageName
+            
            /*
             let installDirectory = appsDirectory!
             let installDump = try FileManager.default.contentsOfDirectory(atPath: installDirectory)

@@ -36,8 +36,8 @@ public struct RouterCreator {
         
         router.get(CONST.apiPath + CONST.getMenu + ":funcid") { request, response, _ in
 
-            let jray = SQLHelper().getMenu(funcId: request.parameters["funcid"]!)
-            print("jray : \(jray.rawString(options: [])!)" )
+            let jray = SQLHelper(dbName: CONST.dbsubServ).getMenu(funcId: request.parameters["funcid"]!)
+    //        print("jray : \(jray.rawString(options: [])!)" )
             do {
                try response.send(jray.rawString(options: [])!).end()
             } catch {
@@ -46,10 +46,43 @@ public struct RouterCreator {
         }
         
         
+        router.get(CONST.apiPath + CONST.apiTestPassword + ":passwd/:token/:funcid") { request, response, _ in
+            
+            var pwdTest = 0  //not equal
+            
+            if (request.parameters["token"]! == "T" &&
+                request.parameters["passwd"]! == Utilities.getToken()) ||
+                request.parameters["passwd"]! == Utilities.getPassword() {
+                pwdTest = 1
+            }
+            
+            do {
+                let msg = Utilities.jsonDbReturn(rtnValue: true, recordId: pwdTest, funcId: request.parameters["funcid"]!)
+                
+                try response.send(JSON(msg).rawString(options: [])!).end()
+            } catch {
+                Log.error("Caught an error while sending a response: \(error)")
+            }
+        }
+        
+    
+        router.get(CONST.apiPath + CONST.apiGetToken + ":funcid") { request, response, _ in
+            
+            do {
+                var msg = Utilities.jsonDbReturn(rtnValue: true, recordId: 1, funcId: request.parameters["funcid"]!)
+                
+                msg[0][CONST.prefToken].string = Utilities.generateToken()
+                
+                try response.send(JSON(msg).rawString(options: [])!).end()
+            } catch {
+                Log.error("Caught an error while sending a response: \(error)")
+            }
+        }
+        
         do {
-            let serverRoot = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
-                                                         appropriateFor: nil, create: false).path
-          //  print("Path In Router : \(serverRoot)")
+            let serverRoot = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask,appropriateFor: nil, create: false).appendingPathComponent(CONST.apps).path
+            
+        //    print("Path In Router : \(serverRoot)")
             router.all("/", middleware: StaticFileServer(path: serverRoot))
         } catch {
             print("Failed to get server root")

@@ -14,9 +14,9 @@ class SQLHelper {
     
     private var db : Database!
 
-    init() {
+    init(dbName: String) {
         print("in db init")
-        db = openDatabase(dbname: CONST.dbsubServ)
+        db = openDatabase(dbname: dbName)
     }
     
     
@@ -33,7 +33,7 @@ class SQLHelper {
                 "\(CONST.fieldPermissions) CHAR(3)",
                 "\(CONST.fieldSubsectId) INTEGER",
                 "\(CONST.fieldHref) CHAR(50)",
-                "\(CONST.fieldStatus) CHAR(1) DEFAULT '\(CONST.ActiveStatus)'",
+                "\(CONST.fieldStatus) CHAR(1) DEFAULT '\(CONST.activeStatus)'",
                 "\(CONST.fieldCreatedAt) INTEGER DEFAULT 0",
                 "\(CONST.fieldUpdatedAt) INTEGER DEFAULT 0"
                 ], ifNotExists: true)
@@ -77,7 +77,7 @@ class SQLHelper {
             CONST.fieldIcon : icon,
             CONST.fieldPermissions : permissions,
             CONST.fieldSubsectId : subsectId,
-            CONST.fieldHref : CONST.subHrefRempte,
+            CONST.fieldHref : CONST.subHrefRemote + app,
             CONST.fieldCreatedAt : Utilities.getTimeNow()
         ]
         
@@ -111,28 +111,28 @@ class SQLHelper {
         }
         
         do {
-            let tableBucket:[DataBucket] = try db.selectFrom(
+            var tableBucket:[DataBucket] = try db.selectFrom(
                 CONST.tableRegistry,
+                whereExpr: "\(CONST.fieldStatus) = '\(CONST.activeStatus)'",
                 block: DataBucket.init
             )
             
-            for index in 1...tableBucket.count {
-       //     print("Dic : \(tableBucket[0].dataDictionary["title"]!)")
-            print("Dic : \(tableBucket[index - 1].dataDictionary["title"]!)")
+            for element in tableBucket {
+       //     print("Dic : \(element.dataDictionary["title"]!)")
+                var tmpjray = JSON(element.dataDictionary)
                 
-                jray.append(JSON(tableBucket[index - 1].dataDictionary))
+                tmpjray[CONST.fieldHref].string = tmpjray[CONST.fieldHref].string!.replacingOccurrences(of: CONST.subHrefRemote, with: "\(CONST.httpProt)://" + "\(Utilities.getHostName()).\(CONST.defaultDomain)\(Utilities.alternatePort())/pkg/")
+            
+                jray.append(tmpjray)
             }
             
             jray[0]["db"].int = tableBucket.count
             jray[0]["rtn"] = true
-            
-            print("JSON jray 2 : \(jray[2])")
-       //     let xray = JSON(tableBucket[0].dataDictionary)
+       
        //     if let jerr = xray["error"]["code"].string {
         //        print("JSON Error : \(jerr)")
        //     }
             
-       //     print("JSON : \(xray)")
       //      for element in xray {
        //     print("JSON : \(xray[0]["title"].string!)")
        //     }
