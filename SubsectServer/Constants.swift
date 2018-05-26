@@ -43,7 +43,7 @@ enum CONST {
     static let subHrefRemote = "Sub_Href_Remote"
     static let dbDirectory = "databases/"
     static let schemasDirectory = "/schemas"
-    static let dbsubServ = dbDirectory + dbSys + subServ
+    static let dbsubServ = dbSys + subServ
 
     static let fieldId = "id";
     static let fieldStatus = "status";

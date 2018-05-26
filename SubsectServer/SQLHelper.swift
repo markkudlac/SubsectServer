@@ -13,16 +13,18 @@ import SwiftyJSON
 class SQLHelper {
     
     private var db : Database!
+    private var dbName : String!
 
     init(dbName: String) {
         print("in db init")
-        db = openDatabase(dbname: dbName)
+        db = openDatabase(dbname: CONST.dbDirectory + dbName)
+        self.dbName = dbName
     }
     
     
     func build() -> Bool {
   
-        if db != nil {
+        if db != nil && self.dbName == CONST.dbsubServ {
             do {
                 try db.createTable(CONST.tableRegistry, definitions: [
                 "\(CONST.fieldId) INTEGER PRIMARY KEY AUTOINCREMENT",
@@ -58,18 +60,13 @@ class SQLHelper {
         } else {
             return false
         }
-    /*
-        initializeRegistry(app: "Testapp", sys: true, icon: "Hello icon", subsectId: 12345, title: "Title for test", permissions: "XYZ")
- */
-  //      testDump(tableName : CONST.tableRegistry)
-        
         return true
     }
         
         
     func initializeRegistry(app: String, sys: Bool, icon: String, subsectId: Int, title: String, permissions: String) -> Bool {
         
-        print("In initialize resity insert")
+    //    print("In initialize resity insert")
         
         var tmpvals : [String : Bindable]! = [
             CONST.fieldApp : app,
@@ -111,7 +108,7 @@ class SQLHelper {
         }
         
         do {
-            var tableBucket:[DataBucket] = try db.selectFrom(
+            let tableBucket:[DataBucket] = try db.selectFrom(
                 CONST.tableRegistry,
                 whereExpr: "\(CONST.fieldStatus) = '\(CONST.activeStatus)'",
                 block: DataBucket.init
@@ -142,6 +139,23 @@ class SQLHelper {
             print("Testdaump failed")
         }
         return JSON(jray)
+    }
+    
+    
+    func createTable(tableName: String, tableBody : [String], permissions: String) -> Bool {
+        
+        do {
+            try db.createTable(tableName, definitions: tableBody, ifNotExists: true)
+        } catch {
+            print("Create table failed : \(tableName)")
+            return false
+        }
+        return true
+    }
+    
+    
+    func insertToDB(tableName :String, data :JSON, funcId :String) {
+        
     }
     
     
@@ -183,10 +197,4 @@ class SQLHelper {
  
 }
 
-/*
- if sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS \(CONST.tableRegistry) ( \(CONST.fieldId) INTEGER PRIMARY KEY AUTOINCREMENT, \(CONST.fieldApp) TEXT, \(CONST.fieldTitle) TEXT, \(CONST.fieldType) CHAR(2) DEFAULT '\(CONST.dbUsr)', \(CONST.fieldIcon) TEXT, \(CONST.fieldPermissions) CHAR(3), \(CONST.fieldSubsectId) INTEGER, \(CONST.fieldHref) CHAR(50), \(CONST.fieldStatus) CHAR(1) DEFAULT '\(CONST.ActiveStatus)', \(CONST.fieldCreatedAt) INTEGER DEFAULT 0, \(CONST.fieldUpdatedAt) INTEGER DEFAULT 0 )",
- nil, nil, nil) != SQLITE_OK {
- let errmsg = String(cString: sqlite3_errmsg(db)!)
- print("error creating Registry table: \(errmsg)")
- }
- */
+

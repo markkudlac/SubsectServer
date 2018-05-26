@@ -147,7 +147,6 @@ class BazaarTableViewController: UITableViewController {
     }
     
     
-    
     func installApp(subsectId: Int) {
         
         let defaultSession = URLSession.shared
@@ -175,8 +174,8 @@ class BazaarTableViewController: UITableViewController {
                             print("JSON Error : \(jerr)")
                         } else {
                             print("Got appZip : \(appZip["pkgname"].string!)")
-                       /*
-                            if let installDirectory = self.installZip(zipFile: appZip["zipfile"].string!, packageName: appZip["pkgname"].string!){
+                       
+                            if let installDirectory = Initialize.installZip(zipFile: appZip["zipfile"].string!, packageName: appZip["pkgname"].string!, dbType: appZip["dbtype"].string!){
                                 
                                 print("Install dir is : \(installDirectory)")
                                 
@@ -186,10 +185,10 @@ class BazaarTableViewController: UITableViewController {
                                             title: appZip["title"].string!,
                                             permissions: appZip["permissions"].string!) {
                                     print("registry entry made")
-                            */
-                                    Initialize.createTables(packageName: appZip["pkgname"].string!)
-                            //    }
-                          //  }
+                            
+                                    Initialize.createTables(packageName: appZip["pkgname"].string!, dbType: appZip["dbtype"].string!)
+                                }
+                            }
                         }
                     } else {
                         print("some response fail : \(response!.statusCode)")
@@ -200,63 +199,6 @@ class BazaarTableViewController: UITableViewController {
         }
     }
     
-    
-    func installZip(zipFile: String, packageName: String) -> String? {
-        
-        let zipTar = NVHTarGzip.init()
-        var appsDirectory : String?
-        
-        do {
-            let tmpDirectory = TemporaryFileUR(ext: packageName)
-            
-            let dataBase64 = Data(base64Encoded: zipFile, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)
-            if dataBase64 == nil {
-                print("base64 invalid")
-            }
-            try dataBase64!.write(to: tmpDirectory.contentURL, options: [] );
-            
-            appsDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(CONST.apps+CONST.sysDir).path
-            
-            if !FileManager.default.fileExists(atPath: appsDirectory!) {
-                print("Creating directory")
-                try FileManager.default.createDirectory(atPath: appsDirectory!, withIntermediateDirectories: true, attributes: nil)
-            }
-        //    print("Path : \(appsDirectory!)")
-            
-            try zipTar.unTarGzipFile(atPath: tmpDirectory.contentURL.path, toPath: appsDirectory!)
-            appsDirectory = appsDirectory! + "/" + packageName
-            
-           /*
-            let installDirectory = appsDirectory!
-            let installDump = try FileManager.default.contentsOfDirectory(atPath: installDirectory)
-  
-            print("Directory documents contents : \(installDirectory)")
-            for element in installDump {
-                print(element)
-            }
- */
-        } catch {
-            print("Error for directory write")
-            appsDirectory = nil
-        }
-        
-        return appsDirectory
-    }
 }
 
 
-public final class TemporaryFileUR {
-    
-    public let contentURL: URL
-    
-    public init(ext: String) {
-        contentURL = URL(fileURLWithPath: NSTemporaryDirectory())
-            .appendingPathComponent(UUID().uuidString)
-            .appendingPathExtension(ext)
-    }
-    
-    deinit {
-        DispatchQueue.global(qos: .utility).async { [contentURL = self.contentURL] in
-            try? FileManager.default.removeItem(at: contentURL) }
-    }
-}

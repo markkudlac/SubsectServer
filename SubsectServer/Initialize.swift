@@ -37,6 +37,50 @@ class Initialize {
     }
     
     
+    static func installZip(zipFile: String, packageName: String, dbType: String) -> String? {
+        
+        let zipTar = NVHTarGzip.init()
+        var appsDirectory : String?
+        
+        let typeDirectory = Utilities.getDirectoryFromDb(dbType: dbType)
+        
+        do {
+            let tmpDirectory = TemporaryFileUR(ext: packageName)
+            
+            let dataBase64 = Data(base64Encoded: zipFile, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)
+            if dataBase64 == nil {
+                print("base64 invalid")
+            }
+            try dataBase64!.write(to: tmpDirectory.contentURL, options: [] );
+            
+            appsDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(CONST.apps + typeDirectory).path
+            
+            if !FileManager.default.fileExists(atPath: appsDirectory!) {
+                print("Creating directory")
+                try FileManager.default.createDirectory(atPath: appsDirectory!, withIntermediateDirectories: true, attributes: nil)
+            }
+                print("Path : \(appsDirectory!)")
+            
+            try zipTar.unTarGzipFile(atPath: tmpDirectory.contentURL.path, toPath: appsDirectory!)
+            appsDirectory = appsDirectory! + "/" + packageName
+            
+            /*
+             let installDirectory = appsDirectory!
+             let installDump = try FileManager.default.contentsOfDirectory(atPath: installDirectory)
+             
+             print("Directory documents contents : \(installDirectory)")
+             for element in installDump {
+             print(element)
+             }
+             */
+        } catch {
+            print("Error for directory write")
+            appsDirectory = nil
+        }
+        
+        return appsDirectory
+    }
+
     static func installMenu(){
         
         var destinationDirectory: String!
@@ -53,7 +97,7 @@ class Initialize {
             print("Error: tar file not found")
         }
         
-        if let sourcePath = Bundle.main.path(forResource:"rootpack", ofType:"targz", inDirectory: "ServerAssets") {
+        if let sourcePath = Bundle.main.path(forResource:CONST.installFile, ofType:"", inDirectory: "ServerAssets") {
             
             let tarZip = NVHTarGzip.init()
             
@@ -93,38 +137,97 @@ class Initialize {
     }
     
     
-    static func createTables(packageName :String){
+    static func createTables(packageName :String, dbType: String){
         
-       let xschems =  getSchemaFiles(packageName: packageName)
+        let schemas =  getSchemaFiles(packageName: packageName, dbType: dbType)
         
+        for element in schemas {
+            print("Schemas full path : \(element)")
+            let sqlTable = getSchema(schemaPath: element, db: dbType + packageName)
+            
+        }
     }
     
     
-    static func getSchema(packageName: String) -> [String] {
+    static func getSchema(schemaPath: String, db: String) -> Bool {
         
         var sqlTable :[String] = []
+        var schema :String!
+        var permissions = "FFF"
+        var tableName :String!
         
-        sqlTable[1] = ""
-        sqlTable[2] = "FFF"
+        //let schema = FileManager.default.contents(atPath: schemaPath)
+        do {
+            schema = try String(contentsOfFile: schemaPath)
+        } catch {
+            print("Error reading schema contents")
+        }
         
-        return sqlTable
+        sqlTable = schema.components(separatedBy: CharacterSet.newlines)
+        
+        if sqlTable.last!.hasPrefix("}") {
+            
+        }
+        
+        if sqlTable.last!.hasSuffix("}") {
+            sqlTable[sqlTable.count - 1] = sqlTable.last!.replacingOccurrences(of: "}", with: "")
+        }
+        
+        for index in 0..<sqlTable.count {
+            sqlTable[index] = sqlTable[index].trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        
+        for element in sqlTable {
+            print("Looping : \(element)")
+            
+            if element.contains("#skip") {
+                return true
+            } else if element.contains("#permissions") {
+                permissions = element.components(separatedBy: CharacterSet.whitespaces)[1]
+                sqlTable.remove(at: sqlTable.index(of: element)!)
+            } else if element.lowercased().contains("create")  && element.lowercased().contains("table"){
+                tableName = element.components(separatedBy: CharacterSet.whitespaces)[2]
+                sqlTable.remove(at: sqlTable.index(of: element)!)
+            } else if element.hasPrefix("}") || element.count < 3 {
+                sqlTable.remove(at: sqlTable.index(of: element)!)
+            } else if element.hasSuffix("}") {
+                sqlTable[sqlTable.index(of: element)!] = element.replacingOccurrences(of: "}", with: "")
+            } else if element.hasSuffix(",") {
+                sqlTable[sqlTable.index(of: element)!] = element.replacingOccurrences(of: ",", with: "")
+            }
+        }
+        
+        print("permisions : \(permissions)")
+        print("Table name : \(tableName!)")
+        sqlTable.insert("\(CONST.fieldId) INTEGER PRIMARY KEY AUTOINCREMENT", at: 0)
+        sqlTable.append("\(CONST.fieldCreatedAt) INTEGER DEFAULT 0")
+        sqlTable.append("\(CONST.fieldUpdatedAt) INTEGER DEFAULT 0")
+        
+        for element in sqlTable {
+            print("Looping clean : \(element)")
+        }
+        
+        return SQLHelper(dbName: db).createTable(tableName: tableName, tableBody: sqlTable, permissions: permissions)
     }
     
     
-    static func getSchemaFiles(packageName: String) -> [String] {
+    static func getSchemaFiles(packageName: String, dbType: String) -> [String] {
         
         var schemaFiles :[String] = []
+        let typeDirectory = Utilities.getDirectoryFromDb(dbType: dbType)
         
         do {
-            let installDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(CONST.apps + CONST.sysDir + "/" + packageName + CONST.schemasDirectory ).path
+            let installDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(CONST.apps + typeDirectory + "/" + packageName + CONST.schemasDirectory ).path
             
             schemaFiles = try FileManager.default.contentsOfDirectory(atPath: installDirectory)
             
-            print("Directory documents contents : \(installDirectory)")
+       //     print("Directory documents contents : \(installDirectory)")
             for element in schemaFiles {
         //        print(element)
                 if element.hasSuffix(CONST.loadfileExt) {
                     schemaFiles.remove(at: schemaFiles.index(of: element)!)
+                } else {
+                    schemaFiles[schemaFiles.index(of: element)!] = installDirectory + "/" + schemaFiles[schemaFiles.index(of: element)!]
                 }
             }
         } catch {
@@ -135,3 +238,21 @@ class Initialize {
     }
     
 }
+
+
+public final class TemporaryFileUR {
+    
+    public let contentURL: URL
+    
+    public init(ext: String) {
+        contentURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension(ext)
+    }
+    
+    deinit {
+        DispatchQueue.global(qos: .utility).async { [contentURL = self.contentURL] in
+            try? FileManager.default.removeItem(at: contentURL) }
+    }
+}
+

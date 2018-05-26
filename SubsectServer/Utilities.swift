@@ -139,6 +139,16 @@ class Utilities {
         toke =  SHA1.hexString(from: toke)!.replacingOccurrences(of: " ", with: "").lowercased()
         return toke
     }
+    
+    
+    static func getDirectoryFromDb(dbType: String) -> String {
+    
+        if dbType.hasPrefix(CONST.dbSys) {
+            return CONST.sysDir
+        } else {
+            return CONST.usrDir
+        }
+    }
 }
 
 
