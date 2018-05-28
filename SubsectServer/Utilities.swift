@@ -90,6 +90,28 @@ class Utilities {
     }
     
     
+    static func setSchemaTypes(dbName :String, tableName :String, types: [String : Int]) {
+        
+        let keyName = CONST.types+dbName+tableName
+        
+        print("setScemaTpes : \(keyName)  types : \(types)")
+        UserDefaults.standard.set(types, forKey: keyName)
+    }
+    
+    
+    static func getSchemaTypes(dbName :String, tableName :String) -> [String : Any]! {
+        
+        let keyName = CONST.types+dbName+tableName
+        
+        
+        let types = UserDefaults.standard.dictionary(forKey: keyName)
+        
+        print("getScemaTpes : \(keyName)  types : \(types)")
+        
+        return types
+    }
+    
+    
     static func getPassword() -> String? {
         var hostName = "mark"
         var hostPassword = "6149garner"

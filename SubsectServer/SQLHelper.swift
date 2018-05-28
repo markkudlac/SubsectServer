@@ -53,6 +53,8 @@ class SQLHelper {
                 "\(CONST.fieldCreatedAt) INTEGER DEFAULT 0",
                 "\(CONST.fieldUpdatedAt) INTEGER DEFAULT 0"
                 ], ifNotExists: true)
+                
+                Utilities.setSchemaTypes(dbName: self.dbName, tableName: CONST.tableSecure, types: [CONST.fieldId : 1])
             } catch {
                 print("Create Permission table failed")
                 return false
@@ -142,10 +144,18 @@ class SQLHelper {
     }
     
     
-    func createTable(tableName: String, tableBody : [String], permissions: String) -> Bool {
+    func createTable(tableName :String, tableBody :[String], permissions :String) -> Bool {
         
         do {
             try db.createTable(tableName, definitions: tableBody, ifNotExists: true)
+            
+            let json = JSON([
+                CONST.fieldDbName : dbName,
+                CONST.fieldTableName : tableName,
+                CONST.fieldPermissions : permissions
+                ])
+            SQLHelper(dbName: CONST.dbsubServ).insertToDB(tableName: CONST.tableSecure, data: json, funcId: "-1")
+            
         } catch {
             print("Create table failed : \(tableName)")
             return false
@@ -154,8 +164,38 @@ class SQLHelper {
     }
     
     
-    func insertToDB(tableName :String, data :JSON, funcId :String) {
+    func insertToDB(tableName :String, data :JSON, funcId :String) -> Bool {
         
+        var insertColumns : [String] = []
+        var insertData : [Bindable] = []
+        
+        print("In insertToDB")
+        let sqlTypes = Utilities.getSchemaTypes(dbName: dbName, tableName: tableName)
+        
+        for (jkey, subJson) in data {
+    //        print("Loop insert key : \(jkey)")
+            insertColumns.append(jkey)
+            if sqlTypes![jkey] as? Int == 1 {
+                insertData.append(subJson.int!)
+            } else if sqlTypes![jkey] as? Int == 2 {
+                insertData.append(subJson.float!)
+            } else if sqlTypes![jkey] as? Int == 3 {
+                print("ERROR : Blob type not supported")
+            } else {
+                insertData.append(subJson.string!)
+            }
+        }
+        
+        insertColumns.append(CONST.fieldCreatedAt)
+        insertData.append(Utilities.getTimeNow())
+        
+        do {
+            try db.insertInto(tableName, columns: insertColumns, values: insertData )
+        } catch {
+            print("Resitry entry failed")
+            return false
+        }
+        return true
     }
     
     

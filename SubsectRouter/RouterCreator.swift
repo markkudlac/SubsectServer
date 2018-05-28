@@ -57,7 +57,7 @@ public struct RouterCreator {
             }
             
             do {
-                let msg = Utilities.jsonDbReturn(rtnValue: true, recordId: pwdTest, funcId: request.parameters["funcid"]!)
+                let msg = Utilities.jsonDbReturn(rtnValue: true, recordId: pwdTest, funcId: request.parameters[CONST.argsFuncId]!)
                 
                 try response.send(JSON(msg).rawString(options: [])!).end()
             } catch {
@@ -69,9 +69,46 @@ public struct RouterCreator {
         router.get(CONST.apiPath + CONST.apiGetToken + ":funcid") { request, response, _ in
             
             do {
-                var msg = Utilities.jsonDbReturn(rtnValue: true, recordId: 1, funcId: request.parameters["funcid"]!)
+                var msg = Utilities.jsonDbReturn(rtnValue: true, recordId: 1, funcId: request.parameters[CONST.argsFuncId]!)
                 
                 msg[0][CONST.prefToken].string = Utilities.generateToken()
+                
+                try response.send(JSON(msg).rawString(options: [])!).end()
+            } catch {
+                Log.error("Caught an error while sending a response: \(error)")
+            }
+        }
+ 
+        // INSERT
+        router.get(CONST.apiPath + CONST.apiInsertDb+"*") { request, response, _ in
+            print("In insertdb 1")
+            do {
+                var msg = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: request.queryParameters[CONST.argsFuncId]!)
+                
+                print("In insert router query string sqlpk : \(request.queryParameters[CONST.argsSQLpk]!)")
+                 print("In insert router query string table : \(request.queryParameters[CONST.argsTable]!)")
+              
+                try response.send(JSON(msg).rawString(options: [])!).end()
+            } catch {
+                Log.error("Caught an error while sending a response: \(error)")
+            }
+        }
+        
+        //QUERRY
+        router.get(CONST.apiPath + CONST.apiQueryDb+"*") { request, response, _ in
+            print("In querydb 1")
+            do {
+                var msg = Utilities.jsonDbReturn(rtnValue: true, recordId: 0, funcId: "F000")
+                
+                print("In query string sqlpk : \(request.queryParameters[CONST.argsSQLpk]!)")
+                
+                
+                let json = try? JSON(data: (request.queryParameters[CONST.argsSQLpk]?.data(using: .utf8)!)!)
+                
+                print("In insert router query string table : \(json![CONST.argsTable])")
+                print("In insert router query string funcid : \(json![CONST.argsFuncId])")
+                
+                msg[0]["funcid"] = json![CONST.argsFuncId]
                 
                 try response.send(JSON(msg).rawString(options: [])!).end()
             } catch {

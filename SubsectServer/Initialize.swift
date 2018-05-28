@@ -165,10 +165,6 @@ class Initialize {
         
         sqlTable = schema.components(separatedBy: CharacterSet.newlines)
         
-        if sqlTable.last!.hasPrefix("}") {
-            
-        }
-        
         if sqlTable.last!.hasSuffix("}") {
             sqlTable[sqlTable.count - 1] = sqlTable.last!.replacingOccurrences(of: "}", with: "")
         }
@@ -188,10 +184,10 @@ class Initialize {
             } else if element.lowercased().contains("create")  && element.lowercased().contains("table"){
                 tableName = element.components(separatedBy: CharacterSet.whitespaces)[2]
                 sqlTable.remove(at: sqlTable.index(of: element)!)
-            } else if element.hasPrefix("}") || element.count < 3 {
+            } else if element.hasPrefix(")") || element.count < 3 {
                 sqlTable.remove(at: sqlTable.index(of: element)!)
-            } else if element.hasSuffix("}") {
-                sqlTable[sqlTable.index(of: element)!] = element.replacingOccurrences(of: "}", with: "")
+            } else if element.hasSuffix(")") {
+                sqlTable[sqlTable.index(of: element)!] = element.replacingOccurrences(of: ")", with: "")
             } else if element.hasSuffix(",") {
                 sqlTable[sqlTable.index(of: element)!] = element.replacingOccurrences(of: ",", with: "")
             }
@@ -203,11 +199,11 @@ class Initialize {
         sqlTable.append("\(CONST.fieldCreatedAt) INTEGER DEFAULT 0")
         sqlTable.append("\(CONST.fieldUpdatedAt) INTEGER DEFAULT 0")
         
-        for element in sqlTable {
-            print("Looping clean : \(element)")
+        if  SQLHelper(dbName: db).createTable(tableName: tableName, tableBody: sqlTable, permissions: permissions) {
+            return loadTypes(dbName: db, tableName: tableName, tableBody: sqlTable)
+        } else {
+            return false
         }
-        
-        return SQLHelper(dbName: db).createTable(tableName: tableName, tableBody: sqlTable, permissions: permissions)
     }
     
     
@@ -233,8 +229,38 @@ class Initialize {
         } catch {
             print("Error listing schemas")
         }
-        
         return schemaFiles
+    }
+    
+    
+    static func loadTypes(dbName : String, tableName :String, tableBody :[String]) -> Bool {
+        
+        var typecode = 0
+        var types :[String : Int] = [:]
+        
+        for element in tableBody {
+        
+            let field = element.components(separatedBy: CharacterSet.whitespaces)
+            let fieldType = field[1].lowercased()
+            
+            if fieldType.contains("int")  {
+                typecode = 1
+            } else if fieldType.contains("double") || fieldType.contains("float") {
+                typecode = 2
+            } else if fieldType.contains("blob") {
+                typecode = 3
+            } else {
+                typecode = 0
+            }
+            
+            if typecode > 0 {
+                types[field[0]] = typecode
+            }
+        }
+        
+        Utilities.setSchemaTypes(dbName: dbName, tableName:tableName, types: types)
+        
+        return true
     }
     
 }

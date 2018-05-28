@@ -24,6 +24,7 @@ enum CONST {
     static let sysDir = "sys"
     static let usrDir = "usr"
     static let loadfileExt = ".ld"
+    static let types = "types_"
     
     static let httpProt = "http"
     static let installFile = "rootpack.targz"
@@ -36,6 +37,9 @@ enum CONST {
     static let apiTestPassword = "testPassword/"
     static let apiGetToken = "getToken/"
     static let apiGetIpAdd = "getIPadd"
+    static let argsSQLpk = "sqlpk"
+    static let argsTable = "table"
+    static let argsFuncId = "funcid"
     
     static let subServ = "subserv";
     static let dbSys = "S_";
