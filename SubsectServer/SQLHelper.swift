@@ -16,7 +16,7 @@ class SQLHelper {
     private var dbName : String!
 
     init(dbName: String) {
-        print("in db init")
+        print("in db init : \(dbName)")
         db = openDatabase(dbname: CONST.dbDirectory + dbName)
         self.dbName = dbName
     }
@@ -164,10 +164,11 @@ class SQLHelper {
     }
     
     
-    func insertToDB(tableName :String, data :JSON, funcId :String) -> Bool {
+    func insertToDB(tableName :String, data :JSON, funcId :String) -> [JSON] {
         
         var insertColumns : [String] = []
         var insertData : [Bindable] = []
+        var rtn = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: funcId)
         
         print("In insertToDB")
         let sqlTypes = Utilities.getSchemaTypes(dbName: dbName, tableName: tableName)
@@ -190,12 +191,69 @@ class SQLHelper {
         insertData.append(Utilities.getTimeNow())
         
         do {
-            try db.insertInto(tableName, columns: insertColumns, values: insertData )
+            let recid = try db.insertInto(tableName, columns: insertColumns, values: insertData )
+            print("Recid for insert table \(tableName) : \(recid)" )
+            if recid != -1 {
+                rtn = Utilities.jsonDbReturn(rtnValue: true, recordId: recid, funcId: funcId)
+            }
         } catch {
             print("Resitry entry failed")
-            return false
         }
-        return true
+        return rtn
+    }
+    
+    
+    func queryDB(query :String, args :JSON, limits :JSON, funcId :String) -> [JSON] {
+        
+        var rtn = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: funcId)
+        
+        print("In query \(query) limits : \(limits["limit"])")
+        
+        struct DataBucket {
+            var dataDictionary : [String : Bindable]!
+            
+            init(row:Statement) throws {
+                dataDictionary = row.dictionaryValue
+            }
+        }
+        
+        do {
+            var statement : [String]!
+            if (query.contains("WHERE")) {
+                statement = query.components(separatedBy: " WHERE ")
+            } else {
+                statement = query.components(separatedBy: " where ")
+            }
+            
+            var whereClause : String?
+            
+            print("Split WHERE : \(statement[0])")
+            
+            if statement.count == 2 {
+                whereClause = statement[1]
+            }
+            
+            let tableBucket:[DataBucket] = try db.selectFrom(
+                statement[0],
+                whereExpr: whereClause,
+                limit: limits["limit"].int,
+                offset: limits["offset"].int,
+                block: DataBucket.init
+            )
+            
+            for element in tableBucket {
+                print("Dic first name : \(element.dataDictionary["firstname"]!)")
+                rtn.append(JSON(element.dataDictionary))
+            }
+            
+            rtn[0][CONST.argsDb].int = tableBucket.count
+            rtn[0]["rtn"] = true
+            
+        } catch {
+            print("queryDB failed")
+        }
+        
+        return rtn
     }
     
     

@@ -40,17 +40,14 @@ class ViewController: UIViewController {
            
             var hash:String = "X"
             let nameServer = Utilities.getNameServer()
-            var hostName = Utilities.getHostName()
+            let hostName = Utilities.getHostName()
             let fullHost = IPUtility.getMyIP().ip! + ":" + "\(CONST.internalPort)"
             
-            let defaults = UserDefaults.standard
     //        let selectServer = UserDefaults.standard.bool(forKey: CONST.selectServer)
             
     //        print("the value of selectServer : " + String(stringInterpolationSegment: selectServer))
     
             // This is just here for testing
-            defaults.set("mark", forKey: CONST.hostName)
-            defaults.set("6149garner", forKey: CONST.hostPassword)
             
        /*
             if nil != defaults.string(forKey: CONST.alternateServer) &&

@@ -143,8 +143,7 @@ class Initialize {
         
         for element in schemas {
             print("Schemas full path : \(element)")
-            let sqlTable = getSchema(schemaPath: element, db: dbType + packageName)
-            
+            getSchema(schemaPath: element, db: dbType + packageName)
         }
     }
     
@@ -227,7 +226,7 @@ class Initialize {
                 }
             }
         } catch {
-            print("Error listing schemas")
+            print("No schemas found")
         }
         return schemaFiles
     }

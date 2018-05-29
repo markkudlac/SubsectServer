@@ -37,9 +37,17 @@ enum CONST {
     static let apiTestPassword = "testPassword/"
     static let apiGetToken = "getToken/"
     static let apiGetIpAdd = "getIPadd"
+    static let apiSaveFile = "savefile"
+    static let apiDeleteFile = "deletefile"
+    
     static let argsSQLpk = "sqlpk"
+    static let argsDb = "db"
     static let argsTable = "table"
+    static let argsValues = "values"
     static let argsFuncId = "funcid"
+    static let argsQuery = "qstr"
+    static let argsArgs = "args"
+    static let argsLimits = "limits"
     
     static let subServ = "subserv";
     static let dbSys = "S_";

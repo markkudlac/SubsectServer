@@ -53,7 +53,7 @@ class Utilities {
     
     static func getHostName() -> String {
         
-        var hostName = "mark"
+        var hostName = "dev"
         if let hostNameTmp = UserDefaults.standard.string(forKey: CONST.hostName) {
             hostName = hostNameTmp
         }
@@ -62,7 +62,7 @@ class Utilities {
     }
     
     
-    static func jsonDbReturn(rtnValue: Bool, recordId: Int, funcId: String) -> [JSON] {
+    static func jsonDbReturn(rtnValue: Bool, recordId: Int64, funcId: String) -> [JSON] {
         return [
         JSON(["rtn": rtnValue, "db": recordId, "funcid": funcId])
         ]
@@ -113,7 +113,7 @@ class Utilities {
     
     
     static func getPassword() -> String? {
-        var hostName = "mark"
+        var hostName = "dev"
         var hostPassword = "6149garner"
         
         if let hostNameTmp:String = UserDefaults.standard.string(forKey: CONST.hostName) {
@@ -124,8 +124,9 @@ class Utilities {
             hostPassword = hostPasswordTmp
         }
         
+        print("Password string : \(hostName + hostPassword)")
         var hash = SHA1.hexString(from: hostName + hostPassword)!.replacingOccurrences(of: " ", with: "").lowercased()
-        //      print("SHA-1 : " + hash) // Another String Value
+              print("SHA-1 : " + hash) // Another String Value
            
         return hash
     }
