@@ -62,6 +62,11 @@ class Utilities {
     }
     
     
+    static func getHostAddress() -> String {
+        return IPUtility.getMyIP().ip! + ":" + "\(CONST.internalPort)"
+    }
+    
+    
     static func jsonDbReturn(rtnValue: Bool, recordId: Int64, funcId: String) -> [JSON] {
         return [
         JSON(["rtn": rtnValue, "db": recordId, "funcid": funcId])

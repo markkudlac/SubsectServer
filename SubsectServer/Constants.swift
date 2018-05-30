@@ -36,9 +36,11 @@ enum CONST {
     static let apiRemoveDb = "removeDB"
     static let apiTestPassword = "testPassword/"
     static let apiGetToken = "getToken/"
-    static let apiGetIpAdd = "getIPadd"
+    static let apiGetIpAdd = "getIPadd/"
+    
     static let apiSaveFile = "savefile"
     static let apiDeleteFile = "deletefile"
+    static let fileContent = "filecontent"
     
     static let argsSQLpk = "sqlpk"
     static let argsDb = "db"
@@ -48,6 +50,7 @@ enum CONST {
     static let argsQuery = "qstr"
     static let argsArgs = "args"
     static let argsLimits = "limits"
+    static let argsIpAddress = "ipadd"
     
     static let subServ = "subserv";
     static let dbSys = "S_";

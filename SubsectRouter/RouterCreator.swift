@@ -46,83 +46,82 @@ public struct RouterCreator {
             }
         }
         
-        
+
+// SAVE FILE
         router.post(CONST.apiPath + CONST.apiSaveFile) { request, response, _ in
             
             do {
                 var rtn = JSON(["rtn" : false])
-                
                
-                let strBody = try request.readString() ?? ""
-         //        print("In save file : \(strBody)")
-                
-                let args = strBody.split(separator: "&")
-                let filePath = args[0].split(separator: "=")[1]
-                let content = args[1].dropFirst(12)
-                
-           //     print("count : \(content.count)  Path : \(filePath)  content: \(content.count)")
-                
-                let pathSplit = filePath.split(separator: "/")
-                let rootPath = filePath.dropLast((pathSplit.last?.count)!+1)
-                
-                do {
-                    let destinationDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(CONST.apps+rootPath.dropFirst(1))
+                if let strBody = try request.readString() {
+            //print("In save file : \(strBody)")
                     
-           //         print("Path for file save directory : \(destinationDirectory.path)")
+                    let args = strBody.split(separator: "&")
+                    let fileName = args[0].split(separator: "=")[1] //arg : "filename"
+                    let fileContent = args[1].dropFirst(CONST.fileContent.count + 1) // = sign
                     
-                    if !FileManager.default.fileExists(atPath: destinationDirectory.path) {
-                              print("Creating directory")
-                        try FileManager.default.createDirectory(atPath: destinationDirectory.path, withIntermediateDirectories: true, attributes: nil)
+                    let pathSplit = fileName.split(separator: "/")
+                    let rootPath = fileName.dropLast((pathSplit.last?.count)!+1)
+                    
+                    do {
+                        let destinationDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(CONST.apps+rootPath.dropFirst(1))
+                        
+            //print("Path for file save directory : \(destinationDirectory.path)")
+                        
+                        if !FileManager.default.fileExists(atPath: destinationDirectory.path) {
+                                  print("Creating directory")
+                            try FileManager.default.createDirectory(atPath: destinationDirectory.path, withIntermediateDirectories: true, attributes: nil)
+                        }
+                        
+            //print("Final save path : \(destinationDirectory.appendingPathComponent(String(pathSplit.last!)).path)")
+                        
+                        try fileContent.removingPercentEncoding!.write(to: destinationDirectory.appendingPathComponent(String(pathSplit.last!)), atomically: true, encoding: String.Encoding.utf8)
+                        
+                        rtn = JSON(["rtn" : true])
+                    } catch {
+                        print("Error: tar file not found")
                     }
-                    
-           //         print("Final save path : \(destinationDirectory.appendingPathComponent(String(pathSplit.last!)).path)")
-                    
-                    try content.removingPercentEncoding!.write(to: destinationDirectory.appendingPathComponent(String(pathSplit.last!)), atomically: true, encoding: String.Encoding.utf8)
-                    
-                    rtn = JSON(["rtn" : true])
-                } catch {
-                    print("Error: tar file not found")
+                } else {
+                    print("Filesave router could not read body")
                 }
-                
                 try response.send(rtn.rawString(options: [])!).end()
             } catch {
                 Log.error("Caught an error while sending a response: \(error)")
             }
         }
         
-        
+ 
+// DELETE FILE
         router.post(CONST.apiPath + CONST.apiDeleteFile) { request, response, _ in
             
             do {
                 var rtn = JSON(["rtn" : false])
                 
-                let strBody = try request.readString() ?? ""
-                       print("In delete file : \(strBody)")
-                
-                let args = strBody.split(separator: "&")
-                let filePath = args[0].split(separator: "=")[1]
-                
-                print("Delete Path : \(filePath) ")
-                
-                do {
-                    let deletePath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(CONST.apps+filePath.dropFirst(1))
+                    if let strBody = try request.readString() {
+                           print("In delete file : \(strBody)")
                     
-                    print("Path for file delete : \(deletePath.path)")
-                   try FileManager.default.removeItem(at: deletePath)
+                    let args = strBody.split(separator: "&")
+                    let fileName = args[0].split(separator: "=")[1]     //arg : "filename"
                     
-                    rtn = JSON(["rtn" : true])
-                    
-                } catch {
-                    print("Error: tar file not found")
+                    do {
+                        let deletePath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(CONST.apps+fileName.dropFirst(1))
+                        
+        //print("Path for file delete : \(deletePath.path)")
+                       try FileManager.default.removeItem(at: deletePath)
+                        
+                        rtn = JSON(["rtn" : true])
+                    } catch {
+                        print("Error: tar file not found")
+                    }
                 }
-    
                 try response.send(rtn.rawString(options: [])!).end()
             } catch {
                 Log.error("Caught an error while sending a response: \(error)")
             }
         }
         
-        
+   
+// TEST PASSWORD
         router.get(CONST.apiPath + CONST.apiTestPassword + ":passwd/:token/:funcid") { request, response, _ in
             
             var pwdTest : Int64 = 0  //not equal
@@ -142,7 +141,8 @@ public struct RouterCreator {
             }
         }
         
-    
+
+// GET TOKEN
         router.get(CONST.apiPath + CONST.apiGetToken + ":" + CONST.argsFuncId) { request, response, _ in
             
             do {
@@ -156,31 +156,83 @@ public struct RouterCreator {
             }
         }
  
-        // INSERT
-        router.get(CONST.apiPath + CONST.apiInsertDb+"*") { request, response, _ in
+        
+// INSERT
+        router.post(CONST.apiPath + CONST.apiInsertDb) { request, response, _ in
     
             do {
                 var msg = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: "-1")
-           //   print("Insert URL string sqlpk : \(request.originalURL)")
-       
-                print("Insert query string sqlpk : \(request.queryParameters[CONST.argsSQLpk]!)")
                 
-                let json = try JSON(data: (request.queryParameters[CONST.argsSQLpk]?.data(using: .utf8)!)!)
+               if var sqlpk = try request.readString()
+               {
+                    sqlpk = String(sqlpk.split(separator: "=")[1])  //This must be first
+                    sqlpk = sqlpk.removingPercentEncoding!
+        //     print("In insertDB : \(sqlpk)")
+               
                 
-           // print("Insert router query string table : \(json[CONST.argsTable])")
-           //   print("Insert firstname : \(json["values"]["firstname"])")
-                
-                msg = SQLHelper(dbName: json[CONST.argsDb].string!).insertToDB(tableName: json[CONST.argsTable].string!, data: json[CONST.argsValues], funcId: json[CONST.argsFuncId].string!)
-                
-     //           msg[0][CONST.argsFuncId] = json[CONST.argsFuncId]
+                    let json = try JSON(data: (sqlpk.data(using: .utf8)!))
+        //print("Insert router post string table : \(json[CONST.argsTable])")
+                    msg = SQLHelper(dbName: json[CONST.argsDb].string!).insertDB(tableName: json[CONST.argsTable].string!, data: json[CONST.argsValues], funcId: json[CONST.argsFuncId].string!)
+                } else {
+                    print("insertDB routing error reading body")
+                }
                 
                 try response.send(JSON(msg).rawString(options: [])!).end()
             } catch {
                 Log.error("Caught an error while sending a response: \(error)")
             }
         }
+   
+
+// UPDATE
+        router.post(CONST.apiPath + CONST.apiUpdateDb) { request, response, _ in
+            
+            do {
+                var msg = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: "-1")
+                
+                if var sqlpk = try request.readString()
+                {
+                    sqlpk = String(sqlpk.split(separator: "=")[1]) //This must be first
+                    sqlpk = sqlpk.removingPercentEncoding!
+        print("In updateDB : \(sqlpk)")
+                    
+                    let json = try JSON(data: (sqlpk.data(using: .utf8)!))
+        print("Update router post string table : \(json[CONST.argsTable])")
+                    
+                    msg = SQLHelper(dbName: json[CONST.argsDb].string!).updateDB(tableName: json[CONST.argsTable].string!, data: json[CONST.argsValues], query: json[CONST.argsQuery].string!, args: json[CONST.argsArgs], funcId: json[CONST.argsFuncId].string!)
+                } else {
+                    print("updateDB routing error reading body")
+                }
+                
+                try response.send(JSON(msg).rawString(options: [])!).end()
+            } catch {
+                Log.error("Caught an error while sending a response: \(error)")
+            }
+        }
+ 
         
-        //QUERRY
+// DELETE
+        router.get(CONST.apiPath + CONST.apiRemoveDb) { request, response, _ in
+            
+            do {
+                var msg = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: "-1")
+                
+                    print("In removedb string sqlpk : \(request.queryParameters[CONST.argsSQLpk]!)")
+                
+                let json = try JSON(data: (request.queryParameters[CONST.argsSQLpk]?.data(using: .utf8)!)!)
+                
+                print("In removeDB router query string table : \(json[CONST.argsTable])")
+                
+                msg = SQLHelper(dbName: json[CONST.argsDb].string!).removeDB(tableName: json[CONST.argsTable].string!, query: json[CONST.argsQuery].string!, args: json[CONST.argsArgs], funcId: json[CONST.argsFuncId].string!)
+                
+                try response.send(JSON(msg).rawString(options: [])!).end()
+            } catch {
+                Log.error("Caught an error while sending a response: \(error)")
+            }
+        }
+      
+        
+// QUERRY
         router.get(CONST.apiPath + CONST.apiQueryDb) { request, response, _ in
           
             do {
@@ -201,6 +253,22 @@ public struct RouterCreator {
                 Log.error("Caught an error while sending a response: \(error)")
             }
         }
+        
+// GET IP ADDRESS
+        router.get(CONST.apiPath + CONST.apiGetIpAdd + ":" + CONST.argsFuncId) { request, response, _ in
+            
+            do {
+                print("In getIPaddress : \(Utilities.getHostAddress())")
+                var msg = Utilities.jsonDbReturn(rtnValue: true, recordId: 1, funcId: request.parameters[CONST.argsFuncId]!)
+                
+                msg[0][CONST.argsIpAddress].string = Utilities.getHostAddress()
+                
+                try response.send(JSON(msg).rawString(options: [])!).end()
+            } catch {
+                Log.error("Caught an error while sending a response: \(error)")
+            }
+        }
+        
         
         do {
             let serverRoot = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask,appropriateFor: nil, create: false).appendingPathComponent(CONST.apps).path

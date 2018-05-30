@@ -41,7 +41,7 @@ class ViewController: UIViewController {
             var hash:String = "X"
             let nameServer = Utilities.getNameServer()
             let hostName = Utilities.getHostName()
-            let fullHost = IPUtility.getMyIP().ip! + ":" + "\(CONST.internalPort)"
+            let fullHost = Utilities.getHostAddress()
             
     //        let selectServer = UserDefaults.standard.bool(forKey: CONST.selectServer)
             

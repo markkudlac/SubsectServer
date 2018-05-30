@@ -117,7 +117,7 @@ class SQLHelper {
             )
             
             for element in tableBucket {
-       //     print("Dic : \(element.dataDictionary["title"]!)")
+    // print("Dic : \(element.dataDictionary["title"]!)")
                 var tmpjray = JSON(element.dataDictionary)
                 
                 tmpjray[CONST.fieldHref].string = tmpjray[CONST.fieldHref].string!.replacingOccurrences(of: CONST.subHrefRemote, with: "\(CONST.httpProt)://" + "\(Utilities.getHostName()).\(CONST.defaultDomain)\(Utilities.alternatePort())/pkg/")
@@ -128,17 +128,12 @@ class SQLHelper {
             jray[0]["db"].int = tableBucket.count
             jray[0]["rtn"] = true
        
-       //     if let jerr = xray["error"]["code"].string {
-        //        print("JSON Error : \(jerr)")
-       //     }
-            
-      //      for element in xray {
-       //     print("JSON : \(xray[0]["title"].string!)")
-       //     }
-  //          print("Dumping \(CONST.tableRegistery) : \(tableBucket[0].dataDictionary)")
+    // if let jerr = xray["error"]["code"].string {
+    //    print("JSON Error : \(jerr)")
+    // }
             
         } catch {
-            print("Testdaump failed")
+            print("GetMenu failed")
         }
         return JSON(jray)
     }
@@ -154,7 +149,7 @@ class SQLHelper {
                 CONST.fieldTableName : tableName,
                 CONST.fieldPermissions : permissions
                 ])
-            SQLHelper(dbName: CONST.dbsubServ).insertToDB(tableName: CONST.tableSecure, data: json, funcId: "-1")
+            SQLHelper(dbName: CONST.dbsubServ).insertDB(tableName: CONST.tableSecure, data: json, funcId: "-1")
             
         } catch {
             print("Create table failed : \(tableName)")
@@ -164,7 +159,7 @@ class SQLHelper {
     }
     
     
-    func insertToDB(tableName :String, data :JSON, funcId :String) -> [JSON] {
+    func insertDB(tableName :String, data :JSON, funcId :String) -> [JSON] {
         
         var insertColumns : [String] = []
         var insertData : [Bindable] = []
@@ -174,7 +169,7 @@ class SQLHelper {
         let sqlTypes = Utilities.getSchemaTypes(dbName: dbName, tableName: tableName)
         
         for (jkey, subJson) in data {
-    //        print("Loop insert key : \(jkey)")
+    //print("Loop insert key : \(jkey)")
             insertColumns.append(jkey)
             if sqlTypes![jkey] as? Int == 1 {
                 insertData.append(subJson.int!)
@@ -197,7 +192,129 @@ class SQLHelper {
                 rtn = Utilities.jsonDbReturn(rtnValue: true, recordId: recid, funcId: funcId)
             }
         } catch {
-            print("Resitry entry failed")
+            print("insertDB entry failed")
+        }
+        return rtn
+    }
+    
+    
+    func updateDB(tableName :String, data :JSON, query :String, args :JSON, funcId :String) -> [JSON] {
+        
+        var updateQuery : String = ""
+        var setValues : String = ""
+        var queryArgs : [Bindable] = []
+        var rtn = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: funcId)
+        
+        let andString = " AND "
+        
+        let sqlTypes = Utilities.getSchemaTypes(dbName: dbName, tableName: tableName)
+        
+        for (jkey, subJson) in data {
+            setValues = setValues + "\(jkey) = "
+            if sqlTypes![jkey] as? Int == 1 {
+                setValues = setValues + (subJson.string!) + ", "
+            } else if sqlTypes![jkey] as? Int == 2 {
+                 setValues = setValues + (subJson.string!) + ", "
+            } else if sqlTypes![jkey] as? Int == 3 {
+                print("ERROR : Blob type not supported")
+            } else {
+                setValues = setValues + "'" + (subJson.string!) + "'" + ", "
+            }
+        }
+        setValues = setValues + "\(CONST.fieldUpdatedAt) = \(Utilities.getTimeNow())"
+        
+        var buildQuery = false
+        if query.count == 0 || query == "null" {
+            buildQuery = true
+        } else {
+            updateQuery = query
+        }
+        
+        for (jkey, subJson) in args {
+    // print("Loop updateDB args key : \(jkey)")
+            
+            if buildQuery {
+                updateQuery = updateQuery + "\(jkey) = ?\(andString)"
+            }
+            
+            if sqlTypes![jkey] as? Int == 1 {
+                queryArgs.append(subJson.int!)
+            } else if sqlTypes![jkey] as? Int == 2 {
+                queryArgs.append(subJson.float!)
+            } else if sqlTypes![jkey] as? Int == 3 {
+                print("ERROR : Blob type not supported")
+            } else {
+                queryArgs.append(subJson.string!)
+            }
+        }
+        
+        if (buildQuery){
+            updateQuery = String(updateQuery.dropLast(andString.count))
+        }
+        
+    // print("update values : " + setValues)
+    // print("update query : " + updateQuery)
+        
+        do {
+            let updateCount = try db.update(tableName, setExpr: setValues, whereExpr: updateQuery, parameters: queryArgs)
+    // print("updateCount for update table \(tableName) : \(updateCount)" )
+            if updateCount != -1 {
+                rtn = Utilities.jsonDbReturn(rtnValue: true, recordId: Int64(updateCount), funcId: funcId)
+            }
+        } catch {
+            print("updateDB entry failed")
+        }
+        return rtn
+    }
+    
+    
+    func removeDB(tableName :String, query :String, args :JSON, funcId :String) -> [JSON] {
+        
+        var updateQuery : String = ""
+        var queryArgs : [Bindable] = []
+        var rtn = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: funcId)
+        
+        let andString = " AND "
+        let sqlTypes = Utilities.getSchemaTypes(dbName: dbName, tableName: tableName)
+        
+        var buildQuery = false
+        
+        if query.count == 0 || query == "null" {
+            buildQuery = true
+        } else {
+            updateQuery = query
+        }
+        
+        for (jkey, subJson) in args {
+    // print("Loop removeDB args key : \(jkey)")
+            
+            if buildQuery {
+                updateQuery = updateQuery + "\(jkey) = ?\(andString)"
+            }
+            
+            if sqlTypes![jkey] as? Int == 1 {
+                queryArgs.append(subJson.int!)
+            } else if sqlTypes![jkey] as? Int == 2 {
+                queryArgs.append(subJson.float!)
+            } else if sqlTypes![jkey] as? Int == 3 {
+                print("ERROR : Blob type not supported")
+            } else {
+                queryArgs.append(subJson.string!)
+            }
+        }
+        
+        if (buildQuery){
+            updateQuery = String(updateQuery.dropLast(andString.count))
+        }
+        
+        do {
+            let deleteCount = try db.deleteFrom(tableName, whereExpr: updateQuery, parameters: queryArgs)
+            print("deleteCount for table \(tableName) : \(deleteCount)" )
+            if deleteCount != -1 {
+                rtn = Utilities.jsonDbReturn(rtnValue: true, recordId: Int64(deleteCount), funcId: funcId)
+            }
+        } catch {
+            print("deleteDB failed")
         }
         return rtn
     }
@@ -206,8 +323,6 @@ class SQLHelper {
     func queryDB(query :String, args :JSON, limits :JSON, funcId :String) -> [JSON] {
         
         var rtn = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: funcId)
-        
-        print("In query \(query) limits : \(limits["limit"])")
         
         struct DataBucket {
             var dataDictionary : [String : Bindable]!
@@ -226,9 +341,7 @@ class SQLHelper {
             }
             
             var whereClause : String?
-            
-            print("Split WHERE : \(statement[0])")
-            
+      
             if statement.count == 2 {
                 whereClause = statement[1]
             }
@@ -242,7 +355,7 @@ class SQLHelper {
             )
             
             for element in tableBucket {
-                print("Dic first name : \(element.dataDictionary["firstname"]!)")
+      //          print("Dic first name : \(element.dataDictionary["firstname"]!)")
                 rtn.append(JSON(element.dataDictionary))
             }
             
@@ -252,33 +365,10 @@ class SQLHelper {
         } catch {
             print("queryDB failed")
         }
-        
         return rtn
     }
     
-    
-    func testDump(tableName : String) {
-    
-        struct DataBucket {
-            var dataDictionary : [String : Bindable]!
-            
-            init(row:Statement) throws {
-                dataDictionary = row.dictionaryValue
-            }
-        }
-        
-        do {
-            let tableBucket:[DataBucket] = try db.selectFrom(
-                tableName,
-                block: DataBucket.init
-            )
-            print("Dumping : \(tableBucket[0].dataDictionary)")
-            
-        } catch {
-            print("Testdaump failed")
-        }
-    }
-    
+
     func openDatabase(dbname: String) -> Database? {
         var opendb: Database? = nil
 
@@ -293,6 +383,30 @@ class SQLHelper {
         return opendb
     }
  
+    /*
+     func testDump(tableName : String) {
+     
+     struct DataBucket {
+     var dataDictionary : [String : Bindable]!
+     
+     init(row:Statement) throws {
+     dataDictionary = row.dictionaryValue
+     }
+     }
+     
+     do {
+     let tableBucket:[DataBucket] = try db.selectFrom(
+     tableName,
+     block: DataBucket.init
+     )
+     print("Dumping : \(tableBucket[0].dataDictionary)")
+     
+     } catch {
+     print("Testdaump failed")
+     }
+     }
+     */
+    
 }
 
 
