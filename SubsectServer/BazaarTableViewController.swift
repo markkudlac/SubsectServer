@@ -186,7 +186,7 @@ class BazaarTableViewController: UITableViewController {
                                             permissions: appZip["permissions"].string!) {
                                     print("registry entry made")
                             
-                                    Initialize.createTables(packageName: appZip["pkgname"].string!, dbType: appZip["dbtype"].string!)
+                                    Initialize.systemTables(packageName: appZip["pkgname"].string!, dbType: appZip["dbtype"].string!)
                                 }
                             }
                         }

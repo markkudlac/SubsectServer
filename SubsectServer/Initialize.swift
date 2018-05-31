@@ -28,7 +28,9 @@ class Initialize {
             print("Error: DB directory creation failed")
         }
         
-        SQLHelper(dbName: CONST.dbsubServ).build()
+        if !SQLHelper(dbName: CONST.dbsubServ).build() {
+            print("Initial build failed")
+        }
      //   }
         
         initializeKituraServer()
@@ -64,15 +66,6 @@ class Initialize {
             try zipTar.unTarGzipFile(atPath: tmpDirectory.contentURL.path, toPath: appsDirectory!)
             appsDirectory = appsDirectory! + "/" + packageName
             
-            /*
-             let installDirectory = appsDirectory!
-             let installDump = try FileManager.default.contentsOfDirectory(atPath: installDirectory)
-             
-             print("Directory documents contents : \(installDirectory)")
-             for element in installDump {
-             print(element)
-             }
-             */
         } catch {
             print("Error for directory write")
             appsDirectory = nil
@@ -137,7 +130,7 @@ class Initialize {
     }
     
     
-    static func createTables(packageName :String, dbType: String){
+    static func systemTables(packageName :String, dbType: String){
         
         let schemas =  getSchemaFiles(packageName: packageName, dbType: dbType)
         
@@ -175,9 +168,9 @@ class Initialize {
         for element in sqlTable {
             print("Looping : \(element)")
             
-            if element.contains("#skip") {
+            if element.contains(CONST.skipSchema) {
                 return true
-            } else if element.contains("#permissions") {
+            } else if element.contains(CONST.permissionsSchema) {
                 permissions = element.components(separatedBy: CharacterSet.whitespaces)[1]
                 sqlTable.remove(at: sqlTable.index(of: element)!)
             } else if element.lowercased().contains("create")  && element.lowercased().contains("table"){
@@ -201,6 +194,7 @@ class Initialize {
         if  SQLHelper(dbName: db).createTable(tableName: tableName, tableBody: sqlTable, permissions: permissions) {
             return loadTypes(dbName: db, tableName: tableName, tableBody: sqlTable)
         } else {
+            print("Create table initialize failed")
             return false
         }
     }

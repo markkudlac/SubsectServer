@@ -51,7 +51,7 @@ public struct RouterCreator {
         router.post(CONST.apiPath + CONST.apiSaveFile) { request, response, _ in
             
             do {
-                var rtn = JSON(["rtn" : false])
+                var rtn = JSON([CONST.argsReturn : false])
                
                 if let strBody = try request.readString() {
             //print("In save file : \(strBody)")
@@ -77,7 +77,7 @@ public struct RouterCreator {
                         
                         try fileContent.removingPercentEncoding!.write(to: destinationDirectory.appendingPathComponent(String(pathSplit.last!)), atomically: true, encoding: String.Encoding.utf8)
                         
-                        rtn = JSON(["rtn" : true])
+                        rtn = JSON([CONST.argsReturn : true])
                     } catch {
                         print("Error: tar file not found")
                     }
@@ -95,7 +95,7 @@ public struct RouterCreator {
         router.post(CONST.apiPath + CONST.apiDeleteFile) { request, response, _ in
             
             do {
-                var rtn = JSON(["rtn" : false])
+                var rtn = JSON([CONST.argsReturn : false])
                 
                     if let strBody = try request.readString() {
                            print("In delete file : \(strBody)")
@@ -109,7 +109,7 @@ public struct RouterCreator {
         //print("Path for file delete : \(deletePath.path)")
                        try FileManager.default.removeItem(at: deletePath)
                         
-                        rtn = JSON(["rtn" : true])
+                        rtn = JSON([CONST.argsReturn : true])
                     } catch {
                         print("Error: tar file not found")
                     }
@@ -170,12 +170,20 @@ public struct RouterCreator {
         //     print("In insertDB : \(sqlpk)")
                
                 
-                    let json = try JSON(data: (sqlpk.data(using: .utf8)!))
-        //print("Insert router post string table : \(json[CONST.argsTable])")
+                let json = try JSON(data: (sqlpk.data(using: .utf8)!))
+                
+                let perms = SQLHelper(dbName: CONST.dbsubServ).checkSecurity(checkDbName: json[CONST.argsDb].string!,tableName: json[CONST.argsTable].string!)
+                
+                 if Utilities.testPermission(operation: CONST.permissionCreate, permission: perms, password: json[CONST.argsPassword].string!) {
                     msg = SQLHelper(dbName: json[CONST.argsDb].string!).insertDB(tableName: json[CONST.argsTable].string!, data: json[CONST.argsValues], funcId: json[CONST.argsFuncId].string!)
+                    } else {
+                        msg = Utilities.jsonDbReturn(rtnValue: false, recordId: Int64(CONST.permissionFailPassword), funcId: json[CONST.argsFuncId].string!)
+                    }
+                
                 } else {
                     print("insertDB routing error reading body")
                 }
+               
                 
                 try response.send(JSON(msg).rawString(options: [])!).end()
             } catch {
@@ -194,12 +202,18 @@ public struct RouterCreator {
                 {
                     sqlpk = String(sqlpk.split(separator: "=")[1]) //This must be first
                     sqlpk = sqlpk.removingPercentEncoding!
-        print("In updateDB : \(sqlpk)")
                     
                     let json = try JSON(data: (sqlpk.data(using: .utf8)!))
-        print("Update router post string table : \(json[CONST.argsTable])")
+ // print("Update router post string table : \(json[CONST.argsTable])")
+                    
+                    let perms = SQLHelper(dbName: CONST.dbsubServ).checkSecurity(checkDbName: json[CONST.argsDb].string!, tableName: json[CONST.argsTable].string!)
+                    
+                    if Utilities.testPermission(operation: CONST.permissionUpdate, permission: perms, password: json[CONST.argsPassword].string!) {
                     
                     msg = SQLHelper(dbName: json[CONST.argsDb].string!).updateDB(tableName: json[CONST.argsTable].string!, data: json[CONST.argsValues], query: json[CONST.argsQuery].string!, args: json[CONST.argsArgs], funcId: json[CONST.argsFuncId].string!)
+                    } else {
+                       msg = Utilities.jsonDbReturn(rtnValue: false, recordId: Int64(CONST.permissionFailPassword), funcId: json[CONST.argsFuncId].string!)
+                    }
                 } else {
                     print("updateDB routing error reading body")
                 }
@@ -217,13 +231,17 @@ public struct RouterCreator {
             do {
                 var msg = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: "-1")
                 
-                    print("In removedb string sqlpk : \(request.queryParameters[CONST.argsSQLpk]!)")
-                
                 let json = try JSON(data: (request.queryParameters[CONST.argsSQLpk]?.data(using: .utf8)!)!)
                 
-                print("In removeDB router query string table : \(json[CONST.argsTable])")
+                let perms = SQLHelper(dbName: CONST.dbsubServ).checkSecurity(checkDbName: json[CONST.argsDb].string!, tableName: json[CONST.argsTable].string!)
                 
-                msg = SQLHelper(dbName: json[CONST.argsDb].string!).removeDB(tableName: json[CONST.argsTable].string!, query: json[CONST.argsQuery].string!, args: json[CONST.argsArgs], funcId: json[CONST.argsFuncId].string!)
+                if Utilities.testPermission(operation: CONST.permissionDelete, permission: perms, password: json[CONST.argsPassword].string!) {
+                
+                    msg = SQLHelper(dbName: json[CONST.argsDb].string!).removeDB(tableName: json[CONST.argsTable].string!, query: json[CONST.argsQuery].string!, args: json[CONST.argsArgs], funcId: json[CONST.argsFuncId].string!)
+                    
+                } else {
+                    msg = Utilities.jsonDbReturn(rtnValue: false, recordId: Int64(CONST.permissionFailPassword), funcId: json[CONST.argsFuncId].string!)
+                }
                 
                 try response.send(JSON(msg).rawString(options: [])!).end()
             } catch {
@@ -238,16 +256,21 @@ public struct RouterCreator {
             do {
                  var msg = Utilities.jsonDbReturn(rtnValue: true, recordId: 0, funcId: "-1")
                 
-            //    print("In query string sqlpk : \(request.queryParameters[CONST.argsSQLpk]!)")
+    // print("In query string sqlpk : \(request.queryParameters[CONST.argsSQLpk]!)")
                 
                 let json = try JSON(data: (request.queryParameters[CONST.argsSQLpk]?.data(using: .utf8)!)!)
                 
-                print("In query router query string table : \(json[CONST.argsTable])")
-   
-                msg = SQLHelper(dbName: json[CONST.argsDb].string!).queryDB(query: json[CONST.argsQuery].string!, args: json[CONST.argsArgs], limits: json[CONST.argsLimits], funcId: json[CONST.argsFuncId].string!)
+    // print("In query router query string table : \(json[CONST.argsTable])")
+                let perms = SQLHelper(dbName: CONST.dbsubServ).checkSecurity(checkDbName: json[CONST.argsDb].string!, tableName: json[CONST.argsTable].string!)
                 
-         //       msg[0][CONST.argsFuncId] = json[CONST.argsFuncId]
+                if Utilities.testPermission(operation: CONST.permissionRead, permission: perms, password: json[CONST.argsPassword].string!) {
+                    
+                    msg = SQLHelper(dbName: json[CONST.argsDb].string!).queryDB(query: json[CONST.argsQuery].string!, args: json[CONST.argsArgs], limits: json[CONST.argsLimits], funcId: json[CONST.argsFuncId].string!)
                 
+    // msg[0][CONST.argsFuncId] = json[CONST.argsFuncId]
+                } else {
+                    msg = Utilities.jsonDbReturn(rtnValue: false, recordId: Int64(CONST.permissionFailPassword), funcId: json[CONST.argsFuncId].string!)
+                }
                 try response.send(JSON(msg).rawString(options: [])!).end()
             } catch {
                 Log.error("Caught an error while sending a response: \(error)")

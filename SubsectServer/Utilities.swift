@@ -69,7 +69,7 @@ class Utilities {
     
     static func jsonDbReturn(rtnValue: Bool, recordId: Int64, funcId: String) -> [JSON] {
         return [
-        JSON(["rtn": rtnValue, "db": recordId, "funcid": funcId])
+        JSON([CONST.argsReturn: rtnValue, CONST.argsDb: recordId, CONST.argsFuncId: funcId])
         ]
     }
     
@@ -99,7 +99,7 @@ class Utilities {
         
         let keyName = CONST.types+dbName+tableName
         
-        print("setScemaTpes : \(keyName)  types : \(types)")
+// print("setScemaTpes : \(keyName)  types : \(types)")
         UserDefaults.standard.set(types, forKey: keyName)
     }
     
@@ -107,11 +107,9 @@ class Utilities {
     static func getSchemaTypes(dbName :String, tableName :String) -> [String : Any]! {
         
         let keyName = CONST.types+dbName+tableName
-        
-        
         let types = UserDefaults.standard.dictionary(forKey: keyName)
         
-        print("getScemaTpes : \(keyName)  types : \(types)")
+ // print("getScemaTpes : \(keyName)  types : \(types)")
         
         return types
     }
@@ -176,6 +174,22 @@ class Utilities {
         } else {
             return CONST.usrDir
         }
+    }
+    
+    
+    static func testPermission(operation :Int, permission :String, password :String) -> Bool {
+    
+        let permiss = Array(permission.trimmingCharacters(in: .whitespaces))
+        var userPermission = Int(String(permiss[CONST.permissionUser]), radix: 16)
+        
+// print("testPermission user : \(userPermission!) op: \(operation) mask: \(userPermission! & operation)")
+        
+        if (userPermission! & operation) > 0 {
+            return true
+        }
+        
+        userPermission = Int(String(permiss[CONST.permissionSuper]), radix: 16)
+        return password == Utilities.getPassword() && (userPermission! & operation) > 0
     }
 }
 

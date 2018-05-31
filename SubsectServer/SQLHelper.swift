@@ -16,7 +16,7 @@ class SQLHelper {
     private var dbName : String!
 
     init(dbName: String) {
-        print("in db init : \(dbName)")
+       
         db = openDatabase(dbname: CONST.dbDirectory + dbName)
         self.dbName = dbName
     }
@@ -45,16 +45,20 @@ class SQLHelper {
             }
         
             do {
-                try db.createTable(CONST.tableSecure, definitions: [
+                
+                let tableBody = [
                 "\(CONST.fieldId) INTEGER PRIMARY KEY AUTOINCREMENT",
                 "\(CONST.fieldDbName) TEXT",
                 "\(CONST.fieldTableName) TEXT",
                 "\(CONST.fieldPermissions) CHAR(3)",
                 "\(CONST.fieldCreatedAt) INTEGER DEFAULT 0",
                 "\(CONST.fieldUpdatedAt) INTEGER DEFAULT 0"
-                ], ifNotExists: true)
+                ]
                 
-                Utilities.setSchemaTypes(dbName: self.dbName, tableName: CONST.tableSecure, types: [CONST.fieldId : 1])
+                try db.createTable(CONST.tableSecure, definitions: tableBody, ifNotExists: true)
+                
+                Initialize.loadTypes(dbName: self.dbName, tableName: CONST.tableSecure, tableBody: tableBody)
+                
             } catch {
                 print("Create Permission table failed")
                 return false
@@ -126,7 +130,7 @@ class SQLHelper {
             }
             
             jray[0]["db"].int = tableBucket.count
-            jray[0]["rtn"] = true
+            jray[0][CONST.argsReturn] = true
        
     // if let jerr = xray["error"]["code"].string {
     //    print("JSON Error : \(jerr)")
@@ -141,6 +145,8 @@ class SQLHelper {
     
     func createTable(tableName :String, tableBody :[String], permissions :String) -> Bool {
         
+        var rtn = false
+        
         do {
             try db.createTable(tableName, definitions: tableBody, ifNotExists: true)
             
@@ -149,13 +155,19 @@ class SQLHelper {
                 CONST.fieldTableName : tableName,
                 CONST.fieldPermissions : permissions
                 ])
-            SQLHelper(dbName: CONST.dbsubServ).insertDB(tableName: CONST.tableSecure, data: json, funcId: "-1")
             
-        } catch {
-            print("Create table failed : \(tableName)")
-            return false
+            if SQLHelper(dbName: CONST.dbsubServ).insertDB(tableName: CONST.tableSecure, data: json, funcId: "-1")[0]["rtn"].bool! {
+                rtn = true
+//This is here for test
+           //     throw NSError(domain: "Subsect", code: -1, userInfo: ["mess": "This is sub throw"])
+            }
+
+            // Cathch error from db
+        } catch let err as NSError {
+            print("Create table failed : \(tableName) sqldcode : \(err.code)")
+            rtn = false
         }
-        return true
+        return rtn
     }
     
     
@@ -165,7 +177,6 @@ class SQLHelper {
         var insertData : [Bindable] = []
         var rtn = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: funcId)
         
-        print("In insertToDB")
         let sqlTypes = Utilities.getSchemaTypes(dbName: dbName, tableName: tableName)
         
         for (jkey, subJson) in data {
@@ -224,7 +235,7 @@ class SQLHelper {
         setValues = setValues + "\(CONST.fieldUpdatedAt) = \(Utilities.getTimeNow())"
         
         var buildQuery = false
-        if query.count == 0 || query == "null" {
+        if query.isEmpty || query == "null" {
             buildQuery = true
         } else {
             updateQuery = query
@@ -279,7 +290,7 @@ class SQLHelper {
         
         var buildQuery = false
         
-        if query.count == 0 || query == "null" {
+        if query.isEmpty || query == "null" {
             buildQuery = true
         } else {
             updateQuery = query
@@ -309,7 +320,7 @@ class SQLHelper {
         
         do {
             let deleteCount = try db.deleteFrom(tableName, whereExpr: updateQuery, parameters: queryArgs)
-            print("deleteCount for table \(tableName) : \(deleteCount)" )
+    // print("deleteCount for table \(tableName) : \(deleteCount)" )
             if deleteCount != -1 {
                 rtn = Utilities.jsonDbReturn(rtnValue: true, recordId: Int64(deleteCount), funcId: funcId)
             }
@@ -323,6 +334,9 @@ class SQLHelper {
     func queryDB(query :String, args :JSON, limits :JSON, funcId :String) -> [JSON] {
         
         var rtn = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: funcId)
+        var buildQuery = true
+        var tableName = ""
+        var sqlColumns :[String]?
         
         struct DataBucket {
             var dataDictionary : [String : Bindable]!
@@ -344,10 +358,57 @@ class SQLHelper {
       
             if statement.count == 2 {
                 whereClause = statement[1]
+                buildQuery = false
             }
             
+            var select = String(statement[0]).trimmingCharacters(in: .whitespaces)
+            
+            var splitSelect = select.split(separator: " ")
+            
+    // print("Splitselect count 1 : \(splitSelect.count)")
+            tableName = String(splitSelect.removeLast())
+            
+            if !select.contains("*") && splitSelect.count > 2 {
+                splitSelect.removeLast()
+                splitSelect.removeFirst()
+                
+                sqlColumns = []
+                var tmpStr = ""
+                for element in splitSelect {
+                    tmpStr = String(element).replacingOccurrences(of: ",", with: "")
+                    sqlColumns!.append(tmpStr)
+                }
+            }
+            
+            if buildQuery && args.count > 0 {
+                let andString = " AND "
+                whereClause = ""
+                let sqlTypes = Utilities.getSchemaTypes(dbName: self.dbName, tableName: tableName)
+                
+                for (fieldName, value) in args {
+          
+                    whereClause = whereClause! + "\(fieldName) = "
+                    
+                    if sqlTypes![fieldName] as? Int == 1 {
+                        whereClause = whereClause! + "\(value.int!)"
+                    } else if sqlTypes![fieldName] as? Int == 2 {
+                        whereClause = whereClause! + "\(value.float!)"
+                    } else if sqlTypes![fieldName] as? Int == 3 {
+                        print("ERROR : Blob type not supported")
+                    } else {
+                        whereClause = whereClause! + "'" + value.string! + "'"
+                    }
+                    whereClause = whereClause! + andString
+                }
+                whereClause = String(whereClause!.dropLast(andString.count))
+            }
+            
+// print("sqlColumns : \(sqlColumns)")
+// print("table name : \(tableName) whereclause : \(whereClause)   args : \(args)")
+ 
             let tableBucket:[DataBucket] = try db.selectFrom(
-                statement[0],
+                tableName,
+                columns: sqlColumns,
                 whereExpr: whereClause,
                 limit: limits["limit"].int,
                 offset: limits["offset"].int,
@@ -355,24 +416,40 @@ class SQLHelper {
             )
             
             for element in tableBucket {
-      //          print("Dic first name : \(element.dataDictionary["firstname"]!)")
                 rtn.append(JSON(element.dataDictionary))
             }
             
-            rtn[0][CONST.argsDb].int = tableBucket.count
-            rtn[0]["rtn"] = true
-            
+            rtn[0][CONST.argsReturn].bool = true
+            rtn[0][CONST.argsDb].int =  tableBucket.count
         } catch {
             print("queryDB failed")
         }
         return rtn
     }
     
+    
+    func checkSecurity(checkDbName :String, tableName :String) -> String {
+     
+        let args = JSON([
+                            CONST.fieldDbName : checkDbName,
+                            CONST.fieldTableName : tableName
+                        ])
+ 
+        let sqlPermissions = SQLHelper(dbName: CONST.dbsubServ).queryDB(query: CONST.tableSecure, args: args, limits: JSON.null, funcId: "-1")
+        
+// print("Got permissions : \(sqlPermissions)")
+        
+        if sqlPermissions[0][CONST.argsReturn].bool! &&
+            sqlPermissions[0][CONST.argsDb].int! > 0 {
+            return sqlPermissions[1][CONST.fieldPermissions].string!
+        } else {
+            return CONST.permissionAll
+        }
+    }
 
     func openDatabase(dbname: String) -> Database? {
         var opendb: Database? = nil
 
-        print("In openDB")
         do {
             let fileURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
                 .appendingPathComponent(dbname)
