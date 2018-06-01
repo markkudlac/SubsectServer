@@ -69,7 +69,7 @@ class BazaarTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-            let cellIdent = "BazaarTableViewCell"
+         let cellIdent = "BazaarTableViewCell"
          let cell = tableView.dequeueReusableCell(withIdentifier: cellIdent, for: indexPath) as? BazaarTableViewCell
          
          if cell == nil {

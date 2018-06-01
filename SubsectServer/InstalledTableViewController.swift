@@ -29,16 +29,16 @@ class InstalledTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80.0
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return 10
     }
-
+    
+    
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
@@ -48,6 +48,38 @@ class InstalledTableViewController: UITableViewController {
         return cell
     }
     */
+    
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cellIdent = "InstalledTableViewCell"
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdent, for: indexPath) as? InstalledTableViewCell
+        
+        if cell == nil {
+            print("The dequeued cell is not an instance of InstalledTableViewCell.")
+        }
+        
+        if (indexPath.row < 5){
+            cell!.installedTitle.text = "Hello"
+            cell!.installedTitle.tag = 5
+            
+            cell!.tag = 5
+         /*
+            var str64 = appList[indexPath.row]["icon"].string
+            str64 = str64!.replacingOccurrences(of: "data:image/png;base64,", with: "")
+            
+            let data: Data = Data(base64Encoded: str64!, options: .ignoreUnknownCharacters)!
+            // turn  Decoded String into Data
+            cell!.appIcon.image = UIImage(data: data as Data)
+ */
+ } else {
+            cell!.installedTitle.text = ""
+        }
+        
+        return cell!
+    }
+    
+
 
     /*
     // Override to support conditional editing of the table view.

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1D28D5AF20C0C11A005A29AC /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D28D5AE20C0C11A005A29AC /* HelpViewController.swift */; };
 		1D28D5B320C0C56F005A29AC /* InstalledTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D28D5B220C0C56F005A29AC /* InstalledTableViewController.swift */; };
+		1D28D5B520C0DB10005A29AC /* InstalledTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D28D5B420C0DB10005A29AC /* InstalledTableViewCell.swift */; };
 		1D43B5B920B06C2900B0ABFC /* Initialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5B820B06C2900B0ABFC /* Initialize.swift */; };
 		1D43B5BB20B07A6300B0ABFC /* SQLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5BA20B07A6300B0ABFC /* SQLHelper.swift */; };
 		1D43B5C420B091C800B0ABFC /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43B5C020B091C800B0ABFC /* Options.swift */; };
@@ -75,6 +76,7 @@
 /* Begin PBXFileReference section */
 		1D28D5AE20C0C11A005A29AC /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		1D28D5B220C0C56F005A29AC /* InstalledTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstalledTableViewController.swift; sourceTree = "<group>"; };
+		1D28D5B420C0DB10005A29AC /* InstalledTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstalledTableViewCell.swift; sourceTree = "<group>"; };
 		1D43B5B820B06C2900B0ABFC /* Initialize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Initialize.swift; sourceTree = "<group>"; };
 		1D43B5BA20B07A6300B0ABFC /* SQLHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLHelper.swift; sourceTree = "<group>"; };
 		1D43B5C020B091C800B0ABFC /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 				1D43B5BA20B07A6300B0ABFC /* SQLHelper.swift */,
 				1D28D5AE20C0C11A005A29AC /* HelpViewController.swift */,
 				1D28D5B220C0C56F005A29AC /* InstalledTableViewController.swift */,
+				1D28D5B420C0DB10005A29AC /* InstalledTableViewCell.swift */,
 			);
 			path = SubsectServer;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				1D43B5C620B091C800B0ABFC /* AllowedOrigins.swift in Sources */,
 				1DDC8F7B20AFB99700BCE107 /* ViewController.swift in Sources */,
 				1D43B5C720B091C800B0ABFC /* RouterCreator.swift in Sources */,
+				1D28D5B520C0DB10005A29AC /* InstalledTableViewCell.swift in Sources */,
 				1D28D5AF20C0C11A005A29AC /* HelpViewController.swift in Sources */,
 				1D43B5BB20B07A6300B0ABFC /* SQLHelper.swift in Sources */,
 				1DDC8EBC20AE57BD00BCE107 /* AppDelegate.swift in Sources */,
