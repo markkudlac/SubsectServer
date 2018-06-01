@@ -34,6 +34,17 @@ class SetupViewController: UIViewController {
     }
     
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.destination is HelpViewController
+        {
+            let vc = segue.destination as? HelpViewController
+            vc?.helpTarget = CONST.setupHelp
+        }
+    }
+    
+    
+    
     @IBAction func modifyAddress(_ sender: Any) {
         
         UserDefaults.standard.set(alternateServer.text, forKey: CONST.alternateServer)

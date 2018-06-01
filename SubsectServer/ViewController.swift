@@ -43,41 +43,8 @@ class ViewController: UIViewController {
             let hostName = Utilities.getHostName()
             let fullHost = Utilities.getHostAddress()
             
-    //        let selectServer = UserDefaults.standard.bool(forKey: CONST.selectServer)
-            
-    //        print("the value of selectServer : " + String(stringInterpolationSegment: selectServer))
-    
-            // This is just here for testing
-            
-       /*
-            if nil != defaults.string(forKey: CONST.alternateServer) &&
-                !UserDefaults.standard.bool(forKey: CONST.selectServer) {
-                nameServer = defaults.string(forKey: CONST.alternateServer)!
-            }
- 
-            if let hostNameTmp:String = defaults.string(forKey: CONST.hostName) {
-                hostName = hostNameTmp
-                
-                
-                if let hostPassword = defaults.string(forKey: CONST.hostPassword) {
-                    
-                    hash = SHA1.hexString(from: hostName + hostPassword)!
-                    hash = hash.replacingOccurrences(of: " ", with: "").lowercased()
-              //      print("SHA-1 : " + hash) // Another String Value
-                } else {
-                    print("Host password not set")
-                }
-            } else {
-                print("Host name not set")
-            }
-            */
-            
             hash = Utilities.getPassword()!
             do {
-         //       if !hash.isEmpty {
-                    print("Loading file")
-                    // load html string - baseURL needs to be set for local files to load correctly
-                    
                     let params = "subhost=" + hostName + "&subnamesrv=" +
                          nameServer + "&fullhost=" + fullHost + "&passwd=" + hash
                     
@@ -106,7 +73,17 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.destination is HelpViewController
+        {
+            let vc = segue.destination as? HelpViewController
+            vc?.helpTarget = CONST.serverHelp
+        }
+    }
 
+    
     func callJavascript(script: String) {
         
  //       let script = "testJS()"

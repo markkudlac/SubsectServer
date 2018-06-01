@@ -94,6 +94,13 @@ enum CONST {
     static let tableSecure = "secure";
     static let fieldDbName = "dbname";
     static let fieldTableName = "tablename";
+    
+    static let defaultHelp = 0;
+    static let serverHelp = 1
+    static let adminHelp = 2
+    static let setupHelp = 3
+    static let bazaarHelp = 4
+    
 }
 
 
