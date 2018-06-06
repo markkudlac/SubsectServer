@@ -164,7 +164,7 @@
                             <outlet property="delegate" destination="1Oe-R0-eYw" id="e2f-Rl-OlF"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="cGM-4v-D9M"/>
+                    <navigationItem key="navigationItem" title="Bazaar" id="cGM-4v-D9M"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7y0-il-UcB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -278,7 +278,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KMU-aU-Wws">
-                                            <rect key="frame" x="188" y="-3" width="74" height="70"/>
+                                            <rect key="frame" x="179" y="7" width="74" height="70"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
@@ -302,7 +302,7 @@
                             <outlet property="delegate" destination="TFt-96-PmC" id="hTh-mT-aiy"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="whv-yX-Rql"/>
+                    <navigationItem key="navigationItem" title="Installed" id="whv-yX-Rql"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SwO-Tc-hsL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -371,6 +371,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="Eoj-UN-fTJ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="eeY-UN-evH">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>

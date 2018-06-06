@@ -95,6 +95,8 @@ enum CONST {
     static let fieldDbName = "dbname";
     static let fieldTableName = "tablename";
     
+    static let rowCount = 10
+    
     static let defaultHelp = 0;
     static let serverHelp = 1
     static let adminHelp = 2

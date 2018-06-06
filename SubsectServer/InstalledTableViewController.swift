@@ -7,9 +7,13 @@
 //
 
 import UIKit
+import SwiftyJSON
+
 
 class InstalledTableViewController: UITableViewController {
 
+    private var appList : [JSON]!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -17,9 +21,9 @@ class InstalledTableViewController: UITableViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+         self.navigationItem.leftBarButtonItem = self.editButtonItem
         
-        print("In Installed Controller")
+        getInstalledList()
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,20 +39,17 @@ class InstalledTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 10
+        return CONST.rowCount
     }
     
-    
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+/*
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let curCell = tableView.cellForRow(at: indexPath) as! InstalledTableViewCell
+        print("Row tapped id : \(curCell.tag)")
 
-        // Configure the cell...
-
-        return cell
     }
-    */
-    
+   */
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -59,48 +60,101 @@ class InstalledTableViewController: UITableViewController {
             print("The dequeued cell is not an instance of InstalledTableViewCell.")
         }
         
-        if (indexPath.row < 5){
-            cell!.installedTitle.text = "Hello"
-            cell!.installedTitle.tag = 5
+        if (appList != nil && indexPath.row < appList.count){
+           
+            cell!.tag = appList[indexPath.row]["id"].int!
+            cell!.installedTitle.text = appList[indexPath.row]["title"].string
             
-            cell!.tag = 5
-         /*
             var str64 = appList[indexPath.row]["icon"].string
             str64 = str64!.replacingOccurrences(of: "data:image/png;base64,", with: "")
             
             let data: Data = Data(base64Encoded: str64!, options: .ignoreUnknownCharacters)!
             // turn  Decoded String into Data
-            cell!.appIcon.image = UIImage(data: data as Data)
- */
- } else {
+            cell!.installedIcon.image = UIImage(data: data as Data)
+ 
+        } else {
             cell!.installedTitle.text = ""
+            cell!.installedIcon.image = nil
         }
         
         return cell!
     }
     
 
-
-    /*
+    func getInstalledList() {
+        
+        appList = SQLHelper(dbName: CONST.dbsubServ).queryDB(query: CONST.tableRegistry, args: JSON.null, limits: JSON.null, funcId: "-1")
+        
+        let count :JSON = appList.removeFirst()
+        print("appList count : \(count[CONST.argsDb].int!)")
+        
+        if count[CONST.argsReturn].bool! {
+            if count[CONST.argsDb].int! > 0 {
+                tableView.reloadData()
+            }
+        } else {
+            print("Registry error")
+        }
+    }
+    
+    
+    
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
-        return true
+        return appList != nil && indexPath.row < appList.count
     }
-    */
+    
 
-    /*
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+           
+            
+            let alert = UIAlertController(title: "Uninstall", message: "Would you like to uninstall \(appList[indexPath.row]["title"].string!)", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+                self.uninstallApp(indexPath: indexPath)
+            }))
+            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            
+            self.present(alert, animated: true)
+            
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+    
 
+    func uninstallApp(indexPath :IndexPath){
+        
+        // Delete the row from the data source
+        
+      //  print("Tapped built in delete : \(indexPath)")
+        
+        if removeApp(registryId: appList[indexPath.row]["id"].int!) {
+            appList.remove(at: indexPath.row)
+            
+            let indexInsert = IndexPath(item: CONST.rowCount-1, section: 0)
+            tableView.beginUpdates()
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.insertRows(at: [indexInsert], with: .bottom)
+            tableView.endUpdates()
+            tableView.reloadData()
+        }
+    }
+    
+    
+    private func removeApp(registryId :Int) -> Bool{
+    
+        /*
+ delete registry. permissions, types, install, db
+ */
+        return true
+    }
+    
+    
     /*
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
