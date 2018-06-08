@@ -161,7 +161,7 @@ public struct RouterCreator {
         router.post(CONST.apiPath + CONST.apiInsertDb) { request, response, _ in
     
             do {
-                var msg = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: "-1")
+                var msg = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: nil)
                 
                if var sqlpk = try request.readString()
                {
@@ -196,7 +196,7 @@ public struct RouterCreator {
         router.post(CONST.apiPath + CONST.apiUpdateDb) { request, response, _ in
             
             do {
-                var msg = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: "-1")
+                var msg = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: nil)
                 
                 if var sqlpk = try request.readString()
                 {
@@ -229,7 +229,7 @@ public struct RouterCreator {
         router.get(CONST.apiPath + CONST.apiRemoveDb) { request, response, _ in
             
             do {
-                var msg = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: "-1")
+                var msg = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: nil)
                 
                 let json = try JSON(data: (request.queryParameters[CONST.argsSQLpk]?.data(using: .utf8)!)!)
                 
@@ -254,7 +254,7 @@ public struct RouterCreator {
         router.get(CONST.apiPath + CONST.apiQueryDb) { request, response, _ in
           
             do {
-                 var msg = Utilities.jsonDbReturn(rtnValue: true, recordId: 0, funcId: "-1")
+                 var msg = Utilities.jsonDbReturn(rtnValue: true, recordId: 0, funcId: nil)
                 
     // print("In query string sqlpk : \(request.queryParameters[CONST.argsSQLpk]!)")
                 

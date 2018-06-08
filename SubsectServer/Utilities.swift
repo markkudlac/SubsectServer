@@ -67,9 +67,16 @@ class Utilities {
     }
     
     
-    static func jsonDbReturn(rtnValue: Bool, recordId: Int64, funcId: String) -> [JSON] {
+    static func jsonDbReturn(rtnValue: Bool, recordId: Int64, funcId: String?) -> [JSON] {
+        
+        var funcIdReturn = "-1"
+        
+        if funcId != nil {
+            funcIdReturn = funcId!
+        }
+        
         return [
-        JSON([CONST.argsReturn: rtnValue, CONST.argsDb: recordId, CONST.argsFuncId: funcId])
+        JSON([CONST.argsReturn: rtnValue, CONST.argsDb: recordId, CONST.argsFuncId: funcIdReturn])
         ]
     }
     
@@ -112,6 +119,15 @@ class Utilities {
  // print("getScemaTpes : \(keyName)  types : \(types)")
         
         return types
+    }
+    
+    
+    static func removeSchemaTypes(dbName :String, tableName :String) {
+        
+        let keyName = CONST.types+dbName+tableName
+        
+// print("removetScemaTpes : \(keyName)")
+        UserDefaults.standard.removeObject(forKey: keyName)
     }
     
     

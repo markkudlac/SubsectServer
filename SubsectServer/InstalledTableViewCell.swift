@@ -13,6 +13,7 @@ class InstalledTableViewCell: UITableViewCell {
     @IBOutlet weak var installedTitle: UILabel!
     @IBOutlet weak var installedIcon: UIImageView!
     
+    @IBOutlet weak var installedStatus: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

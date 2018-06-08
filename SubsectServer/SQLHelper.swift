@@ -26,19 +26,24 @@ class SQLHelper {
   
         if db != nil && self.dbName == CONST.dbsubServ {
             do {
-                try db.createTable(CONST.tableRegistry, definitions: [
-                "\(CONST.fieldId) INTEGER PRIMARY KEY AUTOINCREMENT",
-                "\(CONST.fieldApp) TEXT",
-                "\(CONST.fieldTitle) TEXT",
-                "\(CONST.fieldType) CHAR(2) DEFAULT '\(CONST.dbUsr)'",
-                "\(CONST.fieldIcon) TEXT",
-                "\(CONST.fieldPermissions) CHAR(3)",
-                "\(CONST.fieldSubsectId) INTEGER",
-                "\(CONST.fieldHref) CHAR(50)",
-                "\(CONST.fieldStatus) CHAR(1) DEFAULT '\(CONST.activeStatus)'",
-                "\(CONST.fieldCreatedAt) INTEGER DEFAULT 0",
-                "\(CONST.fieldUpdatedAt) INTEGER DEFAULT 0"
-                ], ifNotExists: true)
+                let tableBody = [
+                    "\(CONST.fieldId) INTEGER PRIMARY KEY AUTOINCREMENT",
+                    "\(CONST.fieldApp) TEXT",
+                    "\(CONST.fieldTitle) TEXT",
+                    "\(CONST.fieldType) CHAR(2) DEFAULT '\(CONST.dbUsr)'",
+                    "\(CONST.fieldIcon) TEXT",
+                    "\(CONST.fieldPermissions) CHAR(3)",
+                    "\(CONST.fieldSubsectId) INTEGER",
+                    "\(CONST.fieldHref) CHAR(50)",
+                    "\(CONST.fieldStatus) CHAR(1) DEFAULT '\(CONST.activeStatus)'",
+                    "\(CONST.fieldCreatedAt) INTEGER DEFAULT 0",
+                    "\(CONST.fieldUpdatedAt) INTEGER DEFAULT 0"
+                ]
+                    
+                try db.createTable(CONST.tableRegistry, definitions: tableBody, ifNotExists: true)
+                
+                Initialize.loadTypes(dbName: self.dbName, tableName: CONST.tableRegistry, tableBody: tableBody)
+                
             } catch {
                 print("Create Registry table failed")
                 return false
@@ -156,7 +161,7 @@ class SQLHelper {
                 CONST.fieldPermissions : permissions
                 ])
             
-            if SQLHelper(dbName: CONST.dbsubServ).insertDB(tableName: CONST.tableSecure, data: json, funcId: "-1")[0]["rtn"].bool! {
+            if SQLHelper(dbName: CONST.dbsubServ).insertDB(tableName: CONST.tableSecure, data: json, funcId: nil)[0]["rtn"].bool! {
                 rtn = true
 //This is here for test
            //     throw NSError(domain: "Subsect", code: -1, userInfo: ["mess": "This is sub throw"])
@@ -171,7 +176,7 @@ class SQLHelper {
     }
     
     
-    func insertDB(tableName :String, data :JSON, funcId :String) -> [JSON] {
+    func insertDB(tableName :String, data :JSON, funcId :String?) -> [JSON] {
         
         var insertColumns : [String] = []
         var insertData : [Bindable] = []
@@ -209,7 +214,7 @@ class SQLHelper {
     }
     
     
-    func updateDB(tableName :String, data :JSON, query :String, args :JSON, funcId :String) -> [JSON] {
+    func updateDB(tableName :String, data :JSON, query :String, args :JSON, funcId :String?) -> [JSON] {
         
         var updateQuery : String = ""
         var setValues : String = ""
@@ -279,7 +284,7 @@ class SQLHelper {
     }
     
     
-    func removeDB(tableName :String, query :String, args :JSON, funcId :String) -> [JSON] {
+    func removeDB(tableName :String, query :String, args :JSON, funcId :String?) -> [JSON] {
         
         var updateQuery : String = ""
         var queryArgs : [Bindable] = []
@@ -331,7 +336,7 @@ class SQLHelper {
     }
     
     
-    func queryDB(query :String, args :JSON, limits :JSON, funcId :String) -> [JSON] {
+    func queryDB(query :String, args :JSON, limits :JSON, funcId :String?) -> [JSON] {
         
         var rtn = Utilities.jsonDbReturn(rtnValue: false, recordId: -1, funcId: funcId)
         var buildQuery = true
@@ -435,7 +440,7 @@ class SQLHelper {
                             CONST.fieldTableName : tableName
                         ])
  
-        let sqlPermissions = SQLHelper(dbName: CONST.dbsubServ).queryDB(query: CONST.tableSecure, args: args, limits: JSON.null, funcId: "-1")
+        let sqlPermissions = SQLHelper(dbName: CONST.dbsubServ).queryDB(query: CONST.tableSecure, args: args, limits: JSON.null, funcId: nil)
         
 // print("Got permissions : \(sqlPermissions)")
         

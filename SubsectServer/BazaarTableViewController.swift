@@ -24,10 +24,14 @@ class BazaarTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
-        getAppList()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        //This gets called on each view
+        getAppList()
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

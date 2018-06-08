@@ -23,9 +23,15 @@ class InstalledTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
          self.navigationItem.leftBarButtonItem = self.editButtonItem
         
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+      //This gets called on each view
         getInstalledList()
     }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -63,18 +69,21 @@ class InstalledTableViewController: UITableViewController {
         if (appList != nil && indexPath.row < appList.count){
            
             cell!.tag = appList[indexPath.row]["id"].int!
-            cell!.installedTitle.text = appList[indexPath.row]["title"].string
+            cell!.installedTitle.text = appList[indexPath.row][CONST.fieldTitle].string
             
-            var str64 = appList[indexPath.row]["icon"].string
+            var str64 = appList[indexPath.row][CONST.fieldIcon].string
             str64 = str64!.replacingOccurrences(of: "data:image/png;base64,", with: "")
             
             let data: Data = Data(base64Encoded: str64!, options: .ignoreUnknownCharacters)!
             // turn  Decoded String into Data
             cell!.installedIcon.image = UIImage(data: data as Data)
+            
+            cell!.installedStatus.text = appList[indexPath.row][CONST.fieldStatus].string
  
         } else {
             cell!.installedTitle.text = ""
             cell!.installedIcon.image = nil
+            cell!.installedStatus.text = ""
         }
         
         return cell!
@@ -83,10 +92,10 @@ class InstalledTableViewController: UITableViewController {
 
     func getInstalledList() {
         
-        appList = SQLHelper(dbName: CONST.dbsubServ).queryDB(query: CONST.tableRegistry, args: JSON.null, limits: JSON.null, funcId: "-1")
+        appList = SQLHelper(dbName: CONST.dbsubServ).queryDB(query: CONST.tableRegistry, args: JSON.null, limits: JSON.null, funcId: nil)
         
         let count :JSON = appList.removeFirst()
-        print("appList count : \(count[CONST.argsDb].int!)")
+// print("appList count : \(count[CONST.argsDb].int!)  funcId : \(count[CONST.argsFuncId].string!)")
         
         if count[CONST.argsReturn].bool! {
             if count[CONST.argsDb].int! > 0 {
@@ -131,9 +140,7 @@ class InstalledTableViewController: UITableViewController {
         
         // Delete the row from the data source
         
-      //  print("Tapped built in delete : \(indexPath)")
-        
-        if removeApp(registryId: appList[indexPath.row]["id"].int!) {
+        if removeApp(registryId: appList[indexPath.row][CONST.fieldId].int!, dbName: appList[indexPath.row][CONST.fieldType].string! + appList[indexPath.row][CONST.fieldApp].string!, appName: appList[indexPath.row][CONST.fieldApp].string!) {
             appList.remove(at: indexPath.row)
             
             let indexInsert = IndexPath(item: CONST.rowCount-1, section: 0)
@@ -146,12 +153,50 @@ class InstalledTableViewController: UITableViewController {
     }
     
     
-    private func removeApp(registryId :Int) -> Bool{
-    
-        /*
- delete registry. permissions, types, install, db
- */
-        return true
+    private func removeApp(registryId :Int, dbName :String, appName :String) -> Bool{
+ 
+        // Make best effort on deletes. This is restartable
+        
+        var rtn = SQLHelper(dbName: CONST.dbsubServ).updateDB(tableName: CONST.tableRegistry, data: JSON([CONST.fieldStatus : "D"]), query: "\(CONST.fieldId) = \(registryId)", args: JSON.null, funcId: nil)
+        
+        if !rtn[0][CONST.argsReturn].bool! || rtn[0][CONST.argsDb].int! <= 0 {
+           print("Registry update failed : \(rtn[0][CONST.argsReturn].bool!)")
+            return false
+        }
+        
+        
+        rtn = SQLHelper(dbName: CONST.dbsubServ).queryDB(query: CONST.tableSecure, args: JSON([CONST.fieldDbName : dbName]), limits: JSON.null, funcId: nil)
+        
+        rtn.removeFirst()
+        for element in rtn {
+            Utilities.removeSchemaTypes(dbName: dbName, tableName: element[CONST.fieldTableName].string!)
+        }
+
+        rtn = SQLHelper(dbName: CONST.dbsubServ).removeDB(tableName: CONST.tableSecure, query: "", args: JSON([CONST.fieldDbName : dbName]), funcId: nil)
+ 
+// print("rtn delete permissions rtn : \(rtn[0][CONST.argsReturn].bool!)  count : \(rtn[0][CONST.argsDb].int!)")
+        
+        do {
+            let appsDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(CONST.apps + Utilities.getDirectoryFromDb(dbType: dbName)).path
+            
+            try FileManager.default.removeItem(atPath: appsDirectory + "/" + appName)
+        } catch {
+            print("Error: App directory removal failed")
+        }
+        
+        do {
+            let dbDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(CONST.dbDirectory).path
+            
+            try FileManager.default.removeItem(atPath: dbDirectory + "/" + dbName)
+        } catch {
+            print("Error: DB directory removal failed")
+        }
+        
+        rtn = SQLHelper(dbName: CONST.dbsubServ).removeDB(tableName: CONST.tableRegistry, query: "", args: JSON([CONST.fieldId : registryId]), funcId: nil)
+        
+// print("rtn delete registry rtn : \(rtn[0][CONST.argsReturn].bool!)  count : \(rtn[0][CONST.argsDb].int!)")
+        
+        return rtn[0][CONST.argsReturn].bool! && rtn[0][CONST.argsDb].int! > 0
     }
     
     
