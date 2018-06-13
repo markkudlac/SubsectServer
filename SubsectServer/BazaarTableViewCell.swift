@@ -27,12 +27,6 @@ class BazaarTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
-    @IBAction func appHelp(_ sender: UIButton) {
-        print("Title tap : \(sender.tag)")
-    }
-    
-    
     
     
 }

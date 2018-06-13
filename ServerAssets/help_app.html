@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <script src="jquery-2.1.3.min.js"></script>
+        <script src="bootstrap_3.3.6.min.js"></script>
+        <link rel="stylesheet" href="bootstrap_3.3.6.min.css">
+            
+            <style>
+                .center {
+                    text-align: center;
+                }
+            
+            
+            body {
+                padding-left: 0px !important;
+            }
+            
+            .desctext {
+                font-size: 130%;
+                line-height: 130%;
+            }
+            
+            .desctext * {
+                font-size: inherit;
+                line-height: inherit;
+            }
+            
+            .desctext p {
+                text-align: justify;
+            }
+            
+            .iconimg {
+                height: 50px;
+                width: 50px;
+            }
+            
+            </style>
+            
+            <script type='text/javascript'>
+                
+                function getParam(val) {
+                    
+                    tmp = [];
+                    var items = "XXXTHISISTHEPARAMSTRINGXXX".split("&");
+                    for (var index = 0; index < items.length; index++) {
+                        tmp = items[index].split("=");
+                        if (tmp[0] === val) return(tmp[1]);
+                    }
+                    return "";
+                }
+            
+                </script>
+            </head>
+    
+    <body>
+        
+<div class="container-fluid">
+    <div id="siteinfo" class="row" style="margin-top: 1em">
+        <div class="col-xs-offset-1 col-xs-10 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
+            <div class="row">
+                
+                <img id="infoicon" class="pull-right iconimg" >
+                    </div>
+            <div class="row center" style="margin-bottom: 1.5em;">
+                <h2 id="infotitle"></h2>
+            </div>
+            
+            <div class="row">
+                <div id="infodesc" class="desctext"></div>
+            </div>
+            
+            <div class="row" style="margin-top: 1.5em; margin-bottom: 1em">
+                <h4><b>File Size : </b><span id="infosize"></span> KB</h4>
+            </div>
+        </div>
+    </div>
+  </div>
+      
+<script>
+    $(document).ready(function(){
+      
+                      $("#infotitle").text(getParam("title"));
+                      $("#infodesc").html(getParam("description"));
+              /*
+                      $("#infoicon").attr("src", $("#"+iconid).attr("src"));
+               */
+                      $("#infoicon").attr("src", getParam("icon"));
+               
+                      $("#infosize").text(Math.round(getParam("filesize") / 1000).toString())
+               
+                      
+                      });
+    </script>
+
+    </body>
+</html>

@@ -28,6 +28,12 @@ enum CONST {
     static let loadfileExt = ".ld"
     static let types = "types_"
     
+    static let webviewParams = "XXXTHISISTHEPARAMSTRINGXXX"
+    static let serverAssets = "ServerAssets"
+    static let serverIndex = "index"
+    
+    static let html = "html"
+    
     static let permissionSuper = 0
     static let permissionGroup = 1
     static let permissionUser = 2
@@ -97,11 +103,18 @@ enum CONST {
     
     static let rowCount = 10
     
+    static let helpServer = "help_server"
+    static let helpApp = "help_app"
+    static let helpId = "helpId"
+    static let fieldDescription = "description"
+    static let fieldFileSize = "filesize"
     static let defaultHelp = 0;
     static let serverHelp = 1
     static let adminHelp = 2
     static let setupHelp = 3
     static let bazaarHelp = 4
+    static let toolsHelp = 5
+    static let installedHelp = 6
     
 }
 

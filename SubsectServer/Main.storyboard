@@ -53,13 +53,27 @@
                     <view key="view" contentMode="scaleToFill" id="wja-Mm-twu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0j2-Uy-BtL">
+                                <rect key="frame" x="0.0" y="70" width="368" height="534"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="quM-J3-eWl"/>
                     </view>
+                    <connections>
+                        <outlet property="helpWebView" destination="0j2-Uy-BtL" id="ycl-vS-94s"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jJ1-a5-gPz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2354" y="-165"/>
+            <point key="canvasLocation" x="2352.8000000000002" y="-165.06746626686657"/>
         </scene>
         <!--Setup-->
         <scene sceneID="M8s-cH-nLU">
@@ -148,7 +162,8 @@
                                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </state>
                                             <connections>
-                                                <action selector="appHelp:" destination="2Rm-jh-KzZ" eventType="touchUpInside" id="ZF9-Ep-EKt"/>
+                                                <action selector="appDescription:" destination="1Oe-R0-eYw" eventType="touchUpInside" id="vvJ-LA-KXd"/>
+                                                <segue destination="ntP-Lc-4Kh" kind="show" id="xe2-nW-06N"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -164,7 +179,18 @@
                             <outlet property="delegate" destination="1Oe-R0-eYw" id="e2f-Rl-OlF"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Bazaar" id="cGM-4v-D9M"/>
+                    <navigationItem key="navigationItem" title="Bazaar" id="cGM-4v-D9M">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="HjZ-M6-4Uh">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="KdH-n8-Rdt">
+                                <rect key="frame" x="276" y="7" width="83" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Help"/>
+                                <connections>
+                                    <segue destination="ntP-Lc-4Kh" kind="show" id="fa8-vk-UMe"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7y0-il-UcB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -243,7 +269,18 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="289-qd-NlD"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Admin" id="p8U-be-gJU"/>
+                    <navigationItem key="navigationItem" title="Admin" id="p8U-be-gJU">
+                        <barButtonItem key="rightBarButtonItem" title="Help" style="plain" id="6AY-8m-KLm">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="rVK-bq-BL0">
+                                <rect key="frame" x="276" y="7" width="83" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Help"/>
+                                <connections>
+                                    <segue destination="ntP-Lc-4Kh" kind="show" id="xLk-33-37T"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="hostEmail" destination="8Da-M0-ACH" id="7o2-yQ-CNL"/>
                         <outlet property="hostName" destination="njA-1M-2lX" id="e56-eB-m5N"/>
@@ -415,6 +452,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="roy-Vw-Cp9"/>
+        <segue reference="xLk-33-37T"/>
     </inferredMetricsTieBreakers>
 </document>

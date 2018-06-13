@@ -34,9 +34,9 @@ class ViewController: UIViewController {
         
        //  Add addScriptMessageHandler in javascript: window.webkit.messageHandlers.MyObserver.postMessage()
         
-        webView.configuration.userContentController.add(self, name: "MyObserver")
+// webView.configuration.userContentController.add(self, name: "MyObserver")
         
-        if let filePath = Bundle.main.path(forResource:"index", ofType:"html", inDirectory: "ServerAssets") {
+        if let filePath = Bundle.main.path(forResource:CONST.serverIndex, ofType:CONST.html, inDirectory: CONST.serverAssets) {
            
             var hash:String = "X"
             let nameServer = Utilities.getNameServer()
@@ -50,10 +50,10 @@ class ViewController: UIViewController {
                     
                 print("params : \(params)")
                     var html = try String(contentsOfFile: filePath, encoding: .utf8)
-                        html = html.replacingOccurrences(of: "XXXTHISISTHEPARAMSTRINGXXX",
+                        html = html.replacingOccurrences(of: CONST.webviewParams,
                                                  with: params)
                     
-                        webView.loadHTMLString(html, baseURL: Bundle.main.resourceURL?.appendingPathComponent("ServerAssets"))
+                        webView.loadHTMLString(html, baseURL: Bundle.main.resourceURL?.appendingPathComponent(CONST.serverAssets))
                    
                 if !Initialize.start() {
                     print("Initize failed")
@@ -83,7 +83,7 @@ class ViewController: UIViewController {
         }
     }
 
-    
+/*
     func callJavascript(script: String) {
         
  //       let script = "testJS()"
@@ -95,10 +95,11 @@ class ViewController: UIViewController {
             }
         }
     }
+ */
  
 }
 
-
+/*
 extension ViewController : WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         // Callback from javascript: window.webkit.messageHandlers.MyObserver.postMessage(message)
@@ -112,6 +113,7 @@ extension ViewController : WKScriptMessageHandler {
     //    print("This is from javascript : " + text )
     }
 }
+*/
 
 
 extension ViewController : WKNavigationDelegate {

@@ -20,8 +20,6 @@ class AdminViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         
-        print("View Admin loaded")
-        
         Utilities.setTextFromDefault(field: hostName, valueTag: CONST.hostName)
         Utilities.setTextFromDefault(field: hostPassword, valueTag: CONST.hostPassword)
         Utilities.setTextFromDefault(field: hostEmail, valueTag: CONST.hostEmail)
@@ -34,6 +32,16 @@ class AdminViewController: UIViewController {
     }
     
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.destination is HelpViewController
+        {
+            let vc = segue.destination as? HelpViewController
+            vc?.helpTarget = CONST.adminHelp 
+        }
+    }
+    
+    
     @IBAction func hostSubmit(_ sender: UIButton) {
   
         let defaults = UserDefaults.standard

@@ -15,6 +15,7 @@ class BazaarTableViewController: UITableViewController {
     
     private var xdataTask: URLSessionDataTask?
     private var appList : JSON!
+    private var appSelected = JSON.null
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,8 @@ class BazaarTableViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         //This gets called on each view
         getAppList()
+        
+      appSelected = JSON.null
     }
     
     
@@ -45,9 +48,22 @@ class BazaarTableViewController: UITableViewController {
     }
 */
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.destination is HelpViewController
+        {
+            let vc = segue.destination as? HelpViewController
+            vc?.helpTarget = CONST.bazaarHelp
+            vc?.appData = appSelected
+        }
+    }
+    
+    
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80.0
     }
+    
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
@@ -81,7 +97,7 @@ class BazaarTableViewController: UITableViewController {
 
         if (appList != nil && indexPath.row < appList.count){
             cell!.appTitle.setTitle(appList[indexPath.row]["title"].string, for: .normal)
-            cell!.appTitle.tag = appList[indexPath.row]["id"].int!
+            cell!.appTitle.tag = indexPath.row
             
             cell!.tag = appList[indexPath.row]["id"].int!
             
@@ -109,6 +125,15 @@ class BazaarTableViewController: UITableViewController {
     }
     */
 
+    
+    @IBAction func appDescription(_ sender: UIButton) {
+        
+        print("Title tap : \(sender.tag)")
+        appSelected = appList[sender.tag]
+        
+    }
+    
+    
     
     func getAppList() {
         
